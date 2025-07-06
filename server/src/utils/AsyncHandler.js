@@ -9,7 +9,13 @@ const asyncHandler = (requestHandler) => {
 		try {
 			await Promise.resolve(requestHandler(req, res, next));
 		} catch (error) {
-			next(error);
+			// next(error);
+			// OR
+
+			res.status(error.status || 500).json({
+				message: error.message || "Internal server error",
+				success: false,
+			});
 		}
 	};
 };

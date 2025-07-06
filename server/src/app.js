@@ -4,6 +4,12 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(
+	express.json({
+		limit: "10KB",
+	}),
+);
+
+app.use(
 	express.urlencoded({
 		extended: true,
 		limit: "10KB",
