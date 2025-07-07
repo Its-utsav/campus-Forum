@@ -62,7 +62,7 @@ schema.methods.comparePassword = async function (incommingPassword) {
 
 schema.methods.generateRefreshToken = function () {
 	try {
-		jwt.sign(
+		return jwt.sign(
 			{
 				_id: this._id,
 				email: this.email,
@@ -81,7 +81,7 @@ schema.methods.generateRefreshToken = function () {
 
 schema.methods.generateAccessToken = function () {
 	try {
-		jwt.sign(
+		return jwt.sign(
 			{
 				_id: this._id,
 			},
