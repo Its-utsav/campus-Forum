@@ -18,8 +18,8 @@ app.use(
 
 app.use(cookieParser());
 
-import postRoutes from "./routes/post.routes.js";
 import usersRoutes from "./routes/users.routes.js";
+import postRoutes from "./routes/post.routes.js";
 
 app.use("/api/users", usersRoutes);
 app.use("/api/posts", postRoutes);

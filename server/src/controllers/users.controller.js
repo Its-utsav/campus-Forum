@@ -10,20 +10,16 @@ const signUp = asyncHandler(async (req, res) => {
 	 */
 	const { username, email, password } = req.body;
 
-	if (
-		!username ||
-		!email ||
-		!password ||
-		checkEmpty(username) ||
-		checkEmpty(email) ||
-		checkEmpty(password)
-	) {
-		console.log("fail");
+	if (checkEmpty(username) || checkEmpty(email) || checkEmpty(password)) {
 		throw new ApiError(400, "All fields are reqired");
 	}
 
 	if (!isValidEmail(email)) {
 		throw new ApiError(400, "Invalid email address");
+	}
+
+	if (!validLength(password, 8)) {
+		throw new ApiError(400, "Password must be eight character long");
 	}
 
 	const existingUser = await User.findOne({ email, username });
@@ -32,13 +28,9 @@ const signUp = asyncHandler(async (req, res) => {
 	if (existingUser) {
 		if (existingUser.username) findBy = "username";
 		if (existingUser.email) findBy = "email";
-
 		throw new ApiError(400, `user already exists with ${findBy}`);
 	}
 
-	if (!validLength(password, 8)) {
-		throw new ApiError(400, "Password must be eight character long");
-	}
 	const newUser = await User.create({ username, email, password });
 
 	if (!newUser) {
