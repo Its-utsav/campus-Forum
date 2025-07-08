@@ -1,10 +1,10 @@
+import jwt from "jsonwebtoken";
+import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/AsyncHandler.js";
-import { checkEmpty, isValidEmail, validLength } from "../utils/validation.js";
-import User from "../models/user.model.js";
 import { generateAccessAndRefreshToken } from "../utils/common.js";
-import jwt from "jsonwebtoken";
+import { checkEmpty, isValidEmail, validLength } from "../utils/validation.js";
 
 const signUp = asyncHandler(async (req, res) => {
 	/**
@@ -181,10 +181,14 @@ const newRefreshToken = asyncHandler(async (req, res) => {
 		}
 
 		if (user.refreshToken !== incommingRefreshToken) {
-			throw new ApiError(404, "Invalid Refresh token or Refresh token is already used");
+			throw new ApiError(
+				404,
+				"Invalid Refresh token or Refresh token is already used",
+			);
 		}
 
-		const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+		const { accessToken, refreshToken } =
+			await generateAccessAndRefreshToken(user._id);
 
 		return res
 			.status(200)
@@ -205,4 +209,4 @@ const newRefreshToken = asyncHandler(async (req, res) => {
 	}
 });
 
-export { getUserInfo, login, logout, signUp, newRefreshToken };
+export { getUserInfo, login, logout, newRefreshToken, signUp };
