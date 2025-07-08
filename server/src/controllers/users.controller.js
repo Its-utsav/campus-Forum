@@ -4,6 +4,7 @@ import asyncHandler from "../utils/AsyncHandler.js";
 import { checkEmpty, isValidEmail, validLength } from "../utils/validation.js";
 import User from "../models/user.model.js";
 import { generateAccessAndRefreshToken } from "../utils/common.js";
+import jwt from "jsonwebtoken";
 
 const signUp = asyncHandler(async (req, res) => {
 	/**
@@ -146,6 +147,62 @@ const getUserInfo = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, {}, "user data fetch successfully"));
 });
 
-const newRefreshToken = asyncHandler(async (req, res) => {});
+const newRefreshToken = asyncHandler(async (req, res) => {
+	// get old refresh token based on that token generate new refresh token
+
+	try {
+		const incommingRefreshToken =
+			req.cookies?.refreshToken ||
+			req.headers.authorization?.replace("Bearer", "");
+
+		if (!incommingRefreshToken) {
+			throw new ApiError(
+				401,
+				"Unauthorized access , refresh token is missing",
+			);
+		}
+
+		// invalid -> throw error
+		const userInfo = jwt.verify(
+			incommingRefreshToken,
+			process.env.REFRESH_TOKEN,
+		);
+
+		if (!userInfo) {
+			throw new ApiError(
+				401,
+				"Unauthorized access , invalid refresh token",
+			);
+		}
+		const user = await User.findById(userInfo._id);
+
+		if (!user) {
+			throw new ApiError(404, "user not found");
+		}
+
+		if (user.refreshToken !== incommingRefreshToken) {
+			throw new ApiError(404, "Invalid Refresh token or Refresh token is already used");
+		}
+
+		const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+
+		return res
+			.status(200)
+			.cookie("accessToken", accessToken, {
+				httpOnly: true,
+				secure: true,
+				maxAge: 5 * 24 * 60 * 1000,
+			})
+			.cookie("refreshToken", refreshToken, {
+				httpOnly: true,
+				secure: true,
+				maxAge: 30 * 24 * 60 * 1000,
+			})
+			.json(new ApiResponse(200, {}, "New Refresh token created"));
+	} catch (error) {
+		console.error(`Error while generating new refresh token`);
+		console.log(error);
+	}
+});
 
 export { getUserInfo, login, logout, signUp, newRefreshToken };
