@@ -10,9 +10,19 @@ const signUp = asyncHandler(async (req, res) => {
 	/**
 	 * @type {{username:string,email:string,password:string}}
 	 */
+	if (!req.body) {
+		throw new ApiError(400, "All fields are reqired");
+	}
 	const { username, email, password } = req.body;
 
-	if (checkEmpty(username) || checkEmpty(email) || checkEmpty(password)) {
+	if (
+		!username ||
+		!email ||
+		!password ||
+		checkEmpty(username) ||
+		checkEmpty(email) ||
+		checkEmpty(password)
+	) {
 		throw new ApiError(400, "All fields are reqired");
 	}
 
@@ -24,9 +34,17 @@ const signUp = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "Password must be eight character long");
 	}
 
-	const existingUser = await User.findOne({ email, username });
+	const existingUser = await User.findOne({
+		$or: [
+			{
+				username,
+			},
+			{
+				email,
+			},
+		],
+	});
 	let findBy = "";
-
 	if (existingUser) {
 		if (existingUser.username) findBy = "username";
 		if (existingUser.email) findBy = "email";
@@ -38,12 +56,12 @@ const signUp = asyncHandler(async (req, res) => {
 	if (!newUser) {
 		throw new ApiError(400, "Unable to create user");
 	}
-
-	delete newUser.password;
+	const userObj = newUser.toObject();
+	delete userObj.password;
 
 	return res
 		.status(201)
-		.json(new ApiResponse(201, newUser, "User create successfully"));
+		.json(new ApiResponse(201, userObj, "User create successfully"));
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -80,8 +98,10 @@ const login = asyncHandler(async (req, res) => {
 		user._id,
 	);
 
-	delete user.password;
-	delete user.refreshToken;
+	const userObj = user.toObject();
+
+	delete userObj.password;
+	delete userObj?.refreshToken;
 
 	return res
 		.status(200)
@@ -95,7 +115,7 @@ const login = asyncHandler(async (req, res) => {
 			secure: true,
 			maxAge: 30 * 24 * 60 * 1000,
 		})
-		.json(new ApiResponse(200, user, "user Logged in successfully"));
+		.json(new ApiResponse(200, userObj, "user Logged in successfully"));
 });
 
 const logout = asyncHandler(async (req, res) => {
@@ -136,7 +156,9 @@ const getUserInfo = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "userid is required");
 	}
 
-	const user = await User.findById(userId).select("-password").lean();
+	const user = await User.findById(userId)
+		.select("-password -refreshToken")
+		.lean();
 
 	if (!user) {
 		throw new ApiError(400, "user not found");
@@ -144,7 +166,7 @@ const getUserInfo = asyncHandler(async (req, res) => {
 
 	return res
 		.status(200)
-		.json(new ApiResponse(200, {}, "user data fetch successfully"));
+		.json(new ApiResponse(200, user, "user data fetch successfully"));
 });
 
 const newRefreshToken = asyncHandler(async (req, res) => {

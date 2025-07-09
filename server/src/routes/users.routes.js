@@ -13,9 +13,8 @@ const router = Router();
 router.post("/singup", signUp);
 router.post("/login", login);
 router.get("/new-refresh-token", newRefreshToken);
-router.use(authMiddleware);
 
-router.post("/logout", logout);
-router.get("/me", getUserInfo);
+router.post("/logout", authMiddleware, logout);
+router.get("/me", authMiddleware, getUserInfo);
 
 export default router;

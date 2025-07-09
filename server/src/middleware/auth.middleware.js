@@ -5,7 +5,9 @@ import jwt from "jsonwebtoken";
 
 const authMiddleware = asyncHandler(async (req, _, next) => {
 	try {
-		const incommingAccessToken = req.cookies?.accessToken;
+		const incommingAccessToken =
+			req.cookies?.accessToken ||
+			req.headers.authorization?.replace("Bearer ", "");
 
 		if (!incommingAccessToken) {
 			throw new ApiError(401, "unautorized access token not found");
