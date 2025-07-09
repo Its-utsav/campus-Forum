@@ -1,9 +1,9 @@
 import Post from "../models/post.model.js";
-import Replies from "../models/replies.model.js";
 import asyncHandler from "../utils/AsyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import { checkEmpty, validLength } from "../utils/validation.js";
+import { isValidObjectId } from "mongoose";
 
 /**
  * @typedef {import("express").Request} Req
@@ -17,10 +17,11 @@ const createAPost = asyncHandler(async (req, res) => {
 	 * @type {{body:string}}
 	 */
 	let { body } = req.body;
-	if (checkEmpty(body)) {
+
+	if (!body || checkEmpty(body)) {
 		throw new ApiError(400, "post is required");
 	}
-	body.trim();
+	body = body?.trim();
 
 	if (!validLength(body, 10)) {
 		throw new ApiError(400, "post must have atleast 10 characters");
@@ -39,11 +40,11 @@ const createAPost = asyncHandler(async (req, res) => {
 const getAllPost = asyncHandler(async (req, res) => {
 	const allPost = await Post.find({});
 
-	if (!allPost) {
+	if (!allPost || allPost.length === 0) {
 		throw new ApiError(404, "no post are found");
 	}
 
-	return res.status(200).json(new ApiResponse(200, allPost, "post created"));
+	return res.status(200).json(new ApiResponse(200, allPost, "post found"));
 });
 
 /** @param {Req} req @param {Res} res @param {Next} next */
@@ -53,8 +54,10 @@ const getPost = asyncHandler(async (req, res) => {
 	if (!postId) {
 		throw new ApiError(400, "postid is required");
 	}
-
-	const post = await Replies.findOne({ postId });
+	if (!isValidObjectId(postId)) {
+		throw new ApiError(404, "invalid post id");
+	}
+	const post = await Post.findById(postId);
 
 	if (!post) {
 		throw new ApiError(404, "no post found");

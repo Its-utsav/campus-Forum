@@ -23,9 +23,9 @@ const authMiddleware = asyncHandler(async (req, _, next) => {
 		req.user = isUser;
 		next();
 	} catch (error) {
-		return next(
-			new ApiError(401, error.message || "invalid refresh token"),
-		);
+		// return next(
+		throw new ApiError(401, error.message || "invalid refresh token");
+		// );
 	}
 });
 
