@@ -20,10 +20,12 @@ const authMiddleware = asyncHandler(async (req, _, next) => {
 		if (!isUser) {
 			throw new ApiError(404, "user not found");
 		}
-		req.user = user;
+		req.user = isUser;
 		next();
 	} catch (error) {
-		throw new ApiError(401, error.message || "invalid refresh token");
+		return next(
+			new ApiError(401, error.message || "invalid refresh token"),
+		);
 	}
 });
 
