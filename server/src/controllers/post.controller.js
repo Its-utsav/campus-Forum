@@ -31,6 +31,7 @@ const createAPost = asyncHandler(async (req, res) => {
 	const newPost = await Post.create({
 		body,
 		author: userId,
+		type: "QUERY",
 	});
 
 	return res.status(201).json(new ApiResponse(201, newPost, "post created"));
@@ -38,7 +39,7 @@ const createAPost = asyncHandler(async (req, res) => {
 
 /** @param {Req} req @param {Res} res @param {Next} next */
 const getAllPost = asyncHandler(async (req, res) => {
-	const allPost = await Post.find({});
+	const allPost = await Post.find({ type: { $eq: "QUERY" } });
 
 	if (!allPost || allPost.length === 0) {
 		throw new ApiError(404, "no post are found");
@@ -57,7 +58,9 @@ const getPost = asyncHandler(async (req, res) => {
 	if (!isValidObjectId(postId)) {
 		throw new ApiError(404, "invalid post id");
 	}
-	const post = await Post.findById(postId);
+	const post = await Post.findOne({
+		$and: [{ _id: postId }, { type: "QUERY" }],
+	});
 
 	if (!post) {
 		throw new ApiError(404, "no post found");
@@ -65,5 +68,11 @@ const getPost = asyncHandler(async (req, res) => {
 
 	return res.status(200).json(new ApiResponse(200, post, "post found"));
 });
+/** @param {Req} req @param {Res} res @param {Next} next */
+const deletePost = asyncHandler(async (req, res) => {
+	return res.json({
+		msg: "Implementation is pending",
+	});
+});
 
-export { createAPost, getAllPost, getPost };
+export { createAPost, getAllPost, getPost, deletePost };

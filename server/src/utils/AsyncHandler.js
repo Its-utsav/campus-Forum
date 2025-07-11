@@ -11,8 +11,8 @@ const asyncHandler = (requestHandler) => {
 		} catch (error) {
 			// next(error);
 			// OR
-
-			res.status(error.status || 500).json({
+			console.error(error);
+			res.status(error.statusCode || 500).json({
 				message: error.message || "Internal server error",
 				success: false,
 			});

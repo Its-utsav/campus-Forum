@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 
 const authMiddleware = asyncHandler(async (req, _, next) => {
 	try {
+		/**
+		 * @type {string}
+		 */
 		const incommingAccessToken =
 			req.cookies?.accessToken ||
 			req.headers.authorization?.replace("Bearer ", "");
