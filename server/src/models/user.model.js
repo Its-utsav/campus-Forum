@@ -18,6 +18,7 @@ const schema = new Schema(
 			lowercase: true,
 			trim: true,
 			unique: true,
+			index: true,
 		},
 		department: {
 			type: String,
