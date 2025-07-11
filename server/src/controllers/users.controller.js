@@ -70,7 +70,7 @@ const login = asyncHandler(async (req, res) => {
 	 */
 	const { email, password } = req.body;
 
-	if (checkEmpty(email) || checkEmpty(password)) {
+	if (checkEmpty(email) || checkEmpty(password) || email || password) {
 		throw new ApiError(400, "All fields are reqired");
 	}
 
@@ -108,12 +108,12 @@ const login = asyncHandler(async (req, res) => {
 		.cookie("accessToken", accessToken, {
 			httpOnly: true,
 			secure: true,
-			maxAge: 5 * 24 * 60 * 1000,
+			maxAge: 5 * 24 * 60 * 60 * 1000,
 		})
 		.cookie("refreshToken", refreshToken, {
 			httpOnly: true,
 			secure: true,
-			maxAge: 30 * 24 * 60 * 1000,
+			maxAge: 30 * 24 * 60 * 60 * 1000,
 		})
 		.json(new ApiResponse(200, userObj, "user Logged in successfully"));
 });
@@ -217,12 +217,12 @@ const newRefreshToken = asyncHandler(async (req, res) => {
 			.cookie("accessToken", accessToken, {
 				httpOnly: true,
 				secure: true,
-				maxAge: 5 * 24 * 60 * 1000,
+				maxAge: 5 * 24 * 60 * 60 * 1000,
 			})
 			.cookie("refreshToken", refreshToken, {
 				httpOnly: true,
 				secure: true,
-				maxAge: 30 * 24 * 60 * 1000,
+				maxAge: 30 * 24 * 60 * 60 * 1000,
 			})
 			.json(new ApiResponse(200, {}, "New Refresh token created"));
 	} catch (error) {

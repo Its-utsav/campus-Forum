@@ -1,9 +1,9 @@
-import Post from "../models/post.model.js";
-import asyncHandler from "../utils/AsyncHandler.js";
-import ApiResponse from "../utils/ApiResponse.js";
-import ApiError from "../utils/ApiError.js";
-import { checkEmpty, validLength } from "../utils/validation.js";
 import { isValidObjectId } from "mongoose";
+import Post from "../models/post.model.js";
+import ApiError from "../utils/ApiError.js";
+import ApiResponse from "../utils/ApiResponse.js";
+import asyncHandler from "../utils/AsyncHandler.js";
+import { checkEmpty, validLength } from "../utils/validation.js";
 
 /**
  * @typedef {import("express").Request} Req
@@ -30,8 +30,7 @@ const createAPost = asyncHandler(async (req, res) => {
 
 	const newPost = await Post.create({
 		body,
-		author: userId,
-		type: "QUERY",
+		authorId: userId,
 	});
 
 	return res.status(201).json(new ApiResponse(201, newPost, "post created"));
@@ -39,7 +38,7 @@ const createAPost = asyncHandler(async (req, res) => {
 
 /** @param {Req} req @param {Res} res @param {Next} next */
 const getAllPost = asyncHandler(async (req, res) => {
-	const allPost = await Post.find({ type: { $eq: "QUERY" } });
+	const allPost = await Post.find({});
 
 	if (!allPost || allPost.length === 0) {
 		throw new ApiError(404, "no post are found");
@@ -58,9 +57,7 @@ const getPost = asyncHandler(async (req, res) => {
 	if (!isValidObjectId(postId)) {
 		throw new ApiError(404, "invalid post id");
 	}
-	const post = await Post.findOne({
-		$and: [{ _id: postId }, { type: "QUERY" }],
-	});
+	const post = await Post.findById(postId);
 
 	if (!post) {
 		throw new ApiError(404, "no post found");
@@ -75,4 +72,4 @@ const deletePost = asyncHandler(async (req, res) => {
 	});
 });
 
-export { createAPost, getAllPost, getPost, deletePost };
+export { createAPost, deletePost, getAllPost, getPost };
