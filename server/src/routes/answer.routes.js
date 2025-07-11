@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { deleteAnswer } from "../controllers/answer.controller.js";
+import { deleteAnswer, getAnswer } from "../controllers/answer.controller.js";
 const router = Router();
 
-router.delete("/:answerId", deleteAnswer);
+router.get(getAnswer).delete("/:answerId", deleteAnswer);
 
 export default router;

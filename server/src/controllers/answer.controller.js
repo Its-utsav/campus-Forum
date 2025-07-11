@@ -1,6 +1,7 @@
 import { isValidObjectId } from "mongoose";
 import Post from "../models/post.model.js";
 import Replies from "../models/replies.model.js";
+import Answer from "../models/answer.model.js";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/AsyncHandler.js";
 import { checkEmpty, validLength } from "../utils/validation.js";
@@ -51,10 +52,39 @@ const answerToTheQuestion = asyncHandler(async (req, res) => {
 	return res.status(201).json(new ApiResponse(201, newReply, "post created"));
 });
 
-const deleteAnswer = asyncHandler(async (req, res) => {
-	return res.json({
-		msg: "Implementation is pending",
-	});
+const getAnswer = asyncHandler(async (req, res) => {
+	const answerId = req.params.answerId;
+	if (!answerId) {
+		throw new ApiError(400, "answerId is required");
+	}
+
+	if (!isValidObjectId(answerId)) {
+		throw new ApiError(400, "invalid answerId");
+	}
+	const answer = await Answer.findById(answerId);
+	if (!answer) {
+		throw new ApiError(400, "no answer found");
+	}
+	return res.status(200).json(new ApiResponse(200, answer, "answer found"));
 });
 
-export { answerToTheQuestion, deleteAnswer };
+const deleteAnswer = asyncHandler(async (req, res) => {
+	const answerId = req.params.answerId;
+	if (!answerId) {
+		throw new ApiError(400, "answerId is required");
+	}
+
+	if (!isValidObjectId(answerId)) {
+		throw new ApiError(400, "invalid answerId");
+	}
+
+	const answer = await Answer.findByIdAndDelete(answerId);
+	if (!answer) {
+		throw new ApiError(400, "no answer found");
+	}
+	return res
+		.status(200)
+		.json(new ApiResponse(200, {}, "answer successfully deleted"));
+});
+
+export { answerToTheQuestion, deleteAnswer, getAnswer };
