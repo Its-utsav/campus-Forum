@@ -8,20 +8,20 @@
   - [future enhancement](#future-enhancement)
 
 
-Campus Forum / College Forum 
+Campus Forum / College Forum
 
-## description 
+## description
 
 - As it name suggest "Forum" but for the College , users ( students ) ask question to the all other students / faculty members that is related to the college , academic , activity in college or solve doubts from other students or faculty members and other student can answer those question.
 
 
 ## Pages
 
-1. registration 
+1. registration
 2. login
 3. me -> users info and their questions
-4. ask -> user can ask the question 
-5. ask/questionId -> show question info and their answers 
+4. ask -> user can ask the question
+5. ask/questionId -> show question info and their answers
 
 
 ## backend routes
@@ -30,9 +30,12 @@ Campus Forum / College Forum
 
 1. `/singup` (POST) - sign up in forum (create an account)
 2. `/login` (POST) - login the user
-3. `/me` (GET) - get info of the user
-4. `/ask` (POST) - ask the question
-5. `/ask/:questionID` - (POST/GET) - get the question and post a new answer
+3. `/logout` (POST) - logout the user
+4. `/me` (GET) - get info of the user
+5. `/new-refresh-token` - (GET) - generates a new refresh token
+6. `/post` (POST) - ask the question
+7. `/post` (GET) - get all the question
+8. `/post/:postId` - (POST/GET) - get the question and post a new answer
 
 
 ## possible DB Schema
@@ -54,9 +57,9 @@ Campus Forum / College Forum
    3. post _id
 
 
-## future enhancement 
+## future enhancement
 1. More features like
    1. question upvoting
-   2. Mark as complete 
-   3. Auto close discussion after some time 
-2. Moderation in forum 
+   2. Mark as complete
+   3. Auto close discussion after some time
+2. Moderation in forum
