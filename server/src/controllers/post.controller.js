@@ -1,4 +1,4 @@
-import { isValidObjectId } from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import Post from "../models/post.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
@@ -57,13 +57,39 @@ const getPost = asyncHandler(async (req, res) => {
 	if (!isValidObjectId(postId)) {
 		throw new ApiError(404, "invalid post id");
 	}
-	const post = await Post.findById(postId);
 
-	if (!post) {
-		throw new ApiError(404, "no post found");
-	}
+	// const post = await Post.findById(postId);
 
-	return res.status(200).json(new ApiResponse(200, post, "post found"));
+	// if (!post) {
+	// 	throw new ApiError(404, "no post found");
+	// }
+	// TODO : complete it
+	const post = await Post.aggregate([
+		{
+			$match: {
+				_id: new mongoose.Types.ObjectId(postId),
+			},
+		},
+		{
+			$lookup: {
+				from: "answers",
+				as: "answers",
+				localField: "_id",
+				foreignField: "postId",
+				pipeline: [
+					{
+						$project: {
+							authorId: 1,
+							postId: 1,
+							content: 1,
+						},
+					},
+				],
+			},
+		},
+	]);
+	console.log(post[0]);
+	return res.status(200).json(new ApiResponse(200, post[0], "post found"));
 });
 /** @param {Req} req @param {Res} res @param {Next} next */
 const deletePost = asyncHandler(async (req, res) => {

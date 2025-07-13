@@ -1,10 +1,10 @@
 import { isValidObjectId } from "mongoose";
-import Post from "../models/post.model.js";
 import Answer from "../models/answer.model.js";
+import Post from "../models/post.model.js";
 import ApiError from "../utils/ApiError.js";
+import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/AsyncHandler.js";
 import { checkEmpty, validLength } from "../utils/validation.js";
-import ApiResponse from "../utils/ApiResponse.js";
 
 const answerToTheQuestion = asyncHandler(async (req, res) => {
 	const postId = req.params.postId;
@@ -37,14 +37,10 @@ const answerToTheQuestion = asyncHandler(async (req, res) => {
 	}
 	// post -> replies create
 
-	const newPost = await Post.create({
-		body,
-		authorId: userId,
-	});
-
 	const answer = await Answer.create({
+		content: body,
 		authorId: userId,
-		postId: newPost._id,
+		postId: postId,
 	});
 
 	return res.status(201).json(new ApiResponse(201, answer, "answer created"));
@@ -60,6 +56,7 @@ const getAnswer = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "invalid answerId");
 	}
 	const answer = await Answer.findById(answerId);
+
 	if (!answer) {
 		throw new ApiError(400, "no answer found");
 	}

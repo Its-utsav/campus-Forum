@@ -70,7 +70,7 @@ const login = asyncHandler(async (req, res) => {
 	 */
 	const { email, password } = req.body;
 
-	if (checkEmpty(email) || checkEmpty(password) || email || password) {
+	if (checkEmpty(email) || checkEmpty(password) || !email || !password) {
 		throw new ApiError(400, "All fields are reqired");
 	}
 
