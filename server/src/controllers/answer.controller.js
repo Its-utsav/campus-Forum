@@ -1,6 +1,5 @@
 import { isValidObjectId } from "mongoose";
 import Post from "../models/post.model.js";
-import Replies from "../models/replies.model.js";
 import Answer from "../models/answer.model.js";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/AsyncHandler.js";
@@ -40,16 +39,15 @@ const answerToTheQuestion = asyncHandler(async (req, res) => {
 
 	const newPost = await Post.create({
 		body,
-		author: userId,
-		type: "ANSWER",
+		authorId: userId,
 	});
 
-	const newReply = await Replies.create({
-		author: userId,
+	const answer = await Answer.create({
+		authorId: userId,
 		postId: newPost._id,
 	});
 
-	return res.status(201).json(new ApiResponse(201, newReply, "post created"));
+	return res.status(201).json(new ApiResponse(201, answer, "answer created"));
 });
 
 const getAnswer = asyncHandler(async (req, res) => {
