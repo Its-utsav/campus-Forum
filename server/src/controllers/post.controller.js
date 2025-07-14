@@ -60,9 +60,6 @@ const getPost = asyncHandler(async (req, res) => {
 
 	// const post = await Post.findById(postId);
 
-	// if (!post) {
-	// 	throw new ApiError(404, "no post found");
-	// }
 	// TODO : complete it
 	const post = await Post.aggregate([
 		{
@@ -84,11 +81,38 @@ const getPost = asyncHandler(async (req, res) => {
 							content: 1,
 						},
 					},
+					{
+						$lookup: {
+							from: "users",
+							as: "autherInfo",
+							localField: "authorId",
+							foreignField: "_id",
+							pipeline: [
+								{
+									$project: {
+										username: 1,
+									},
+								},
+							],
+						},
+					},
+					{
+						$unwind: "$autherInfo",
+					},
 				],
 			},
 		},
+		{
+			$addFields: {
+				totalAnswer: {
+					$size: "$answers",
+				},
+			},
+		},
 	]);
-	console.log(post[0]);
+	if (!post || post.length === 0) {
+		throw new ApiError(404, "no post found");
+	}
 	return res.status(200).json(new ApiResponse(200, post[0], "post found"));
 });
 /** @param {Req} req @param {Res} res @param {Next} next */
