@@ -1,7 +1,15 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-
+import cors from "cors";
+import logger from "./utils/logger.js";
 const app = express();
+
+app.use(
+	cors({
+		origin: "*", // temporary
+	}),
+);
+app.use(logger);
 
 app.use(
 	express.json({
@@ -21,9 +29,12 @@ app.use(cookieParser());
 import usersRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import answerRoutes from "./routes/answer.routes.js";
+import GlobalErrorHandler from "./utils/GlobalError.js";
 
 app.use("/api/users", usersRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/answer", answerRoutes);
+
+app.use(GlobalErrorHandler);
 
 export default app;
