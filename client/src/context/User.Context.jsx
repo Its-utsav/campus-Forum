@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const userContext = createContext({
   data: {
@@ -6,7 +6,6 @@ export const userContext = createContext({
     username: null,
   },
   login: () => {},
-
   logout: () => {},
 });
 
@@ -16,8 +15,6 @@ export const useAuth = () => {
 
 export const UserProvider = ({ children }) => {
   const [data, setData] = useState(null);
-
-  const [token, setToken] = useState(null);
 
   const logout = () => setData(null);
 
@@ -37,7 +34,7 @@ export const UserProvider = ({ children }) => {
       console.error(error.message, error);
     }
   };
-  useEffect(() => {}, []);
+
   return (
     <userContext.Provider value={{ data, login, logout }}>
       {children}
