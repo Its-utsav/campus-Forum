@@ -1,4 +1,4 @@
-import { useAuth } from "../context/User.context.jsx";
+import { useAuth } from "../context/User.context.js";
 import Link from "./Link";
 
 function Logout({ onClick }) {
