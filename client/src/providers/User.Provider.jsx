@@ -1,17 +1,4 @@
-import { createContext, useContext, useState } from "react";
-
-export const userContext = createContext({
-  data: {
-    _id: null,
-    username: null,
-  },
-  login: () => {},
-  logout: () => {},
-});
-
-export const useAuth = () => {
-  return useContext(userContext);
-};
+import { useState } from "react";
 
 export const UserProvider = ({ children }) => {
   const [data, setData] = useState(null);

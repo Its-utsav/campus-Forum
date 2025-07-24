@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RouterContext } from "./Router.context";
+import { RouterContext } from "../context/Router.context";
 
 export const RouterProvider = ({ children }) => {
   const [path, setPath] = useState(window.location.pathname);
