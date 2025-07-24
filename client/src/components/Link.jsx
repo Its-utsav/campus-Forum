@@ -1,10 +1,13 @@
+import { useRouter } from "../context/Router.context";
+
 export default function Link({ href = "", children, ...rest } = {}) {
+  const { navigate } = useRouter();
   return (
     <a
       href={href}
       onClick={(e) => {
-        history.replaceState({}, "", href);
         e.preventDefault();
+        navigate(href);
       }}
       {...rest}
     >

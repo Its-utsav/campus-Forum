@@ -1,4 +1,4 @@
-import { useAuth } from "../context/User.Context.jsx";
+import { useAuth } from "../context/User.context.jsx";
 import Link from "./Link";
 
 function Logout({ onClick }) {
@@ -25,12 +25,12 @@ export default function Header() {
     },
     {
       name: "Login",
-      path: "login",
+      path: "/login",
       isActive: !data,
     },
     {
       name: "Register",
-      path: "register",
+      path: "/register",
       isActive: !data,
     },
   ];
