@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { RouterContext } from "../context/Router.context";
 
 export const RouterProvider = ({ children }) => {
@@ -12,10 +12,10 @@ export const RouterProvider = ({ children }) => {
 
   // to -> path to navigate /login -> localhost:8000/login
 
-  const navigate = (to) => {
+  const navigate = useCallback((to) => {
     history.pushState({}, "", to);
     setPath(to);
-  };
+  }, []);
 
   return (
     <RouterContext.Provider value={{ path, navigate }}>
