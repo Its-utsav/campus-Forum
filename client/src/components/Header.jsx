@@ -42,7 +42,7 @@ export default function Header() {
             <p>Campus Forum</p>
           </a> */}
           <Link className="navbar-brand" href="/">
-            <p>Campus Forum</p>
+            Campus Forum
           </Link>
 
           <div>

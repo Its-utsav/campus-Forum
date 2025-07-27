@@ -1,3 +1,4 @@
+import Button from "../components/Button";
 import Input from "../components/Input";
 
 export default function Register() {
@@ -9,9 +10,10 @@ export default function Register() {
         <Input
           label="password"
           type="password"
-          required
           autoComplete="password"
+          required
         />
+        <Button label="Register !!" className="btn-primary" />
       </form>
     </div>
   );

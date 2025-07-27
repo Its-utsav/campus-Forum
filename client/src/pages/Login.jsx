@@ -1,3 +1,4 @@
+import Button from "../components/Button";
 import Input from "../components/Input";
 
 export default function LoginPage() {
@@ -11,6 +12,7 @@ export default function LoginPage() {
           required
           autoComplete="password"
         />
+        <Button label="Login !!" className="btn-primary" />
       </form>
     </div>
   );

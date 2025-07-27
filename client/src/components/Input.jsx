@@ -8,7 +8,13 @@
  * & import("react").InputHTMLAttributes<HtmlHTMLAttributes>} props
  */
 export default function Input(props) {
-  const { label, divClassName = "", inputClassName = "", ...rest } = props;
+  const {
+    label,
+    type = "text",
+    divClassName = "",
+    inputClassName = "",
+    ...rest
+  } = props;
 
   return (
     <div className={`mb-3 ${divClassName}`}>
@@ -17,6 +23,7 @@ export default function Input(props) {
       </label>
       <input
         id={label}
+        type={type}
         className={`form-control ${inputClassName}`}
         placeholder={`Enter ${label}`}
         {...rest}
