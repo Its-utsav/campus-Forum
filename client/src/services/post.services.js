@@ -25,6 +25,7 @@ class PostService {
       return resData.data;
     } catch (error) {
       console.error("error :: createPost ", error);
+      throw error;
     }
   }
 
@@ -47,6 +48,7 @@ class PostService {
       return resData.data;
     } catch (error) {
       console.error("error :: getAllPost ", error);
+      throw error;
     }
   }
 
@@ -72,6 +74,7 @@ class PostService {
       return resData.data;
     } catch (error) {
       console.error("error :: getAPost ", error);
+      throw error;
     }
   }
 
@@ -98,6 +101,7 @@ class PostService {
       return resData.data;
     } catch (error) {
       console.error("error :: getAPost ", error);
+      throw error;
     }
   }
 }

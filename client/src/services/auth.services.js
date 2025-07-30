@@ -23,7 +23,7 @@ class AuthService {
       return data.data;
     } catch (error) {
       console.error("error :: signup", error);
-      // throw error;
+      throw error;
     }
   }
   /**
@@ -46,7 +46,7 @@ class AuthService {
       return data.data;
     } catch (error) {
       console.error("error :: login", error);
-      // throw error;
+      throw error;
     }
   }
 
@@ -66,7 +66,7 @@ class AuthService {
       return data.data;
     } catch (error) {
       console.error("error :: logout", error);
-      // throw error;
+      throw error;
     }
   }
 
@@ -86,7 +86,7 @@ class AuthService {
       return data.data;
     } catch (error) {
       console.error("error :: getUserInfo", error);
-      // throw error;
+      throw error;
     }
   }
 
@@ -106,7 +106,7 @@ class AuthService {
       return data.data;
     } catch (error) {
       console.error("error :: getUserInfo", error);
-      // throw error;
+      throw error;
     }
   }
 }

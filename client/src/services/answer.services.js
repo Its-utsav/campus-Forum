@@ -27,6 +27,7 @@ class AnswerService {
       return resData.data;
     } catch (error) {
       console.error("error :: postAnswer ", error);
+      throw error;
     }
   }
   /**
@@ -49,6 +50,7 @@ class AnswerService {
       return resData.data;
     } catch (error) {
       console.error("error :: getAnswer ", error);
+      throw error;
     }
   }
   /**
@@ -73,6 +75,7 @@ class AnswerService {
       return resData.data;
     } catch (error) {
       console.error("error :: deleteAnswer ", error);
+      throw error;
     }
   }
 }
