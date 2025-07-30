@@ -4,23 +4,14 @@ import { userContext } from "../context/User.context";
 export const UserProvider = ({ children }) => {
   const [data, setData] = useState(null);
 
-  const logout = () => setData(null);
+  const logout = () => {
+    setData(null);
+    localStorage.removeItem("userData");
+  };
 
-  const login = async (data) => {
-    try {
-      const res = await fetch("/api/users/login", {
-        method: "post",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const resBody = await res.json();
-      setData({ _id: resBody.data._id, username: resBody.data.username });
-      return resBody;
-    } catch (error) {
-      console.error(error.message, error);
-    }
+  const login = (data) => {
+    setData(data);
+    localStorage.setItem("userData", JSON.stringify(data));
   };
 
   return (

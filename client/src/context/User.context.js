@@ -5,7 +5,7 @@ export const userContext = createContext({
     _id: null,
     username: null,
   },
-  login: () => {},
+  login: (data) => {},
   logout: () => {},
 });
 
