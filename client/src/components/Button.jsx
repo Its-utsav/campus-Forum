@@ -1,13 +1,13 @@
 /**
  *
- * @param {{label:string,className:string} & import("react").ButtonHTMLAttributes<HtmlHTMLAttributes>} props
+ * @param {import("react").ButtonHTMLAttributes<HTMLButtonElement>} props
  * @returns
  */
 export default function Button(props) {
-  const { label, className = "", ...rest } = props;
+  const { children, className = "btn-primary", ...rest } = props;
   return (
     <button type="button" className={`btn ${className}`} {...rest}>
-      {label}
+      {children}
     </button>
   );
 }

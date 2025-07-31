@@ -8,7 +8,7 @@ import { useAuth } from "../context/User.context";
 export default function LoginPage() {
   const { navigate } = useRouter();
   const { data, login } = useAuth();
-  console.log("authdata value", data);
+
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -55,7 +55,9 @@ export default function LoginPage() {
           }
         />
 
-        <Button label="Login !!" className="btn-primary" type="submit" />
+        <Button className="btn-primary" type="submit">
+          Login !!
+        </Button>
         {message && <p>{message}</p>}
       </form>
     </div>

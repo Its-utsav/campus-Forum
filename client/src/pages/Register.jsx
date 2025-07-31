@@ -13,7 +13,10 @@ export default function Register() {
           autoComplete="password"
           required
         />
-        <Button label="Register !!" className="btn-primary" />
+
+        <Button type="submit" className="btn-primary">
+          Register
+        </Button>
       </form>
     </div>
   );

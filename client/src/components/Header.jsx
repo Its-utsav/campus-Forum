@@ -1,17 +1,26 @@
 import { useAuth } from "../context/User.context.js";
+import authService from "../services/auth.services.js";
+import Button from "./Button.jsx";
 import Link from "./Link";
 
 function Logout({ onClick }) {
   return (
-    <button type="button" onClick={onClick}>
+    <Button type="button" onClick={onClick} className="btn-danger">
       Logout
-    </button>
+    </Button>
   );
 }
 
 export default function Header() {
   const { data, logout } = useAuth();
 
+  const handleClick = () => {
+    authService
+      .logout()
+      .then(() => logout())
+      .catch(() => {});
+    logout();
+  };
   const navItems = [
     {
       name: "My Answer",
@@ -34,6 +43,7 @@ export default function Header() {
       isActive: !data,
     },
   ];
+
   return (
     <header>
       <nav className="navbar bg-body-tertiary">
@@ -60,7 +70,7 @@ export default function Header() {
 
               {data && (
                 <li className="nav-item">
-                  <Logout onClick={logout} />
+                  <Logout onClick={handleClick} />
                 </li>
               )}
             </ul>
