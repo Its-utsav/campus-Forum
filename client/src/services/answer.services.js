@@ -19,7 +19,7 @@ class AnswerService {
         },
       });
       const resData = await res.json();
-      if (!res.ok || !resData.resData) {
+      if (!res.ok || !resData.data) {
         throw new Error(
           resData.message || "something went while posting answer"
         );
@@ -44,7 +44,7 @@ class AnswerService {
         },
       });
       const resData = await res.json();
-      if (!res.ok || !resData.resData) {
+      if (!res.ok || !resData.data) {
         throw new Error(resData.message || "something went while get answer");
       }
       return resData.data;
@@ -67,7 +67,7 @@ class AnswerService {
         },
       });
       const resData = await res.json();
-      if (!res.ok || !resData.resData) {
+      if (!res.ok || !resData.data) {
         throw new Error(
           resData.message || "something went while delete answer"
         );

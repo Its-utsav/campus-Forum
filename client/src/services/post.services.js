@@ -18,7 +18,7 @@ class PostService {
         },
       });
       const resData = await res.json();
-      if (!res.ok || !resData.resData) {
+      if (!res.ok || !resData.data) {
         throw new Error(
           resData.message || "something went wrong at create post"
         );
@@ -32,7 +32,7 @@ class PostService {
 
   async getAllPost() {
     try {
-      const res = await fetch(`${this.BASE_URL}`, {
+      const res = await fetch(`${this.BASE_URL}/posts`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -40,7 +40,7 @@ class PostService {
         },
       });
       const resData = await res.json();
-      if (!res.ok || !resData.resData) {
+      if (!res.ok || !resData.data) {
         throw new Error(
           resData.message || "something went wrong at get all post"
         );
@@ -68,7 +68,7 @@ class PostService {
         },
       });
       const resData = await res.json();
-      if (!res.ok || !resData.resData) {
+      if (!res.ok || !resData.data) {
         throw new Error(resData.message || "something went wrong at get post");
       }
       return resData.data;
@@ -93,7 +93,7 @@ class PostService {
         },
       });
       const resData = await res.json();
-      if (!res.ok || !resData.resData) {
+      if (!res.ok || !resData.data) {
         throw new Error(
           resData.message || "something went while deleting post"
         );
