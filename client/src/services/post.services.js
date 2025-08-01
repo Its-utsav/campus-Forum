@@ -1,6 +1,7 @@
 class PostService {
   constructor() {
     this.BASE_URL = "/api";
+    console.log(this.BASE_URL);
   }
   /**
    *
@@ -8,7 +9,7 @@ class PostService {
    */
   async createPost(postData) {
     try {
-      const res = await fetch(`${this.body}/api/posts`, {
+      const res = await fetch(`${this.BASE_URL}/posts`, {
         method: "POST",
         body: JSON.stringify(postData),
         credentials: "include",
@@ -31,9 +32,8 @@ class PostService {
 
   async getAllPost() {
     try {
-      const res = await fetch(`${this.body}/api/posts`, {
+      const res = await fetch(`${this.BASE_URL}`, {
         method: "GET",
-
         credentials: "include",
         headers: {
           "Content-Type": "application-json",
@@ -59,7 +59,7 @@ class PostService {
    */
   async getAPost(postId) {
     try {
-      const res = await fetch(`${this.body}/api/posts/${postId}`, {
+      const res = await fetch(`${this.BASE_URL}/posts/${postId}`, {
         method: "GET",
 
         credentials: "include",
@@ -85,7 +85,7 @@ class PostService {
    */
   async deleteAPost(postId) {
     try {
-      const res = await fetch(`${this.body}/api/posts/${postId}`, {
+      const res = await fetch(`${this.BASE_URL}/posts/${postId}`, {
         method: "DELETE",
         credentials: "include",
         headers: {
