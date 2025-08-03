@@ -52,8 +52,8 @@ class AuthService {
 
   async logout() {
     try {
-      const res = await fetch(`${this.BASE_URL}/users/login`, {
-        method: "GET",
+      const res = await fetch(`${this.BASE_URL}/users/logout`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
