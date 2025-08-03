@@ -144,9 +144,9 @@ const logout = asyncHandler(async (req, res) => {
 
 	return res
 		.status(200)
-		.json(new ApiResponse(200, {}, "user logout successfully"))
 		.clearCookie("accessToken")
-		.clearCookie("refreshToken");
+		.clearCookie("refreshToken")
+		.json(new ApiResponse(200, {}, "user logout successfully"));
 });
 
 const getUserInfo = asyncHandler(async (req, res) => {

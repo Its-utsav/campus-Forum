@@ -16,7 +16,7 @@
 | ------------------------------ | ------ | ----------------------------- | -------------------------------------------------------- | ---- |
 | `/api/users/signup`            | `POST` | Signup the user               | `username`, `email`, `password`, `department` (optional) | -    |
 | `/api/users/login`             | `POST` | Sign in the user              | `email`, `password`                                      | -    |
-| `/api/users/logout`            | `GET`  | logout the user               |                                                          | -    |
+| `/api/users/logout`            | `POST` | logout the user               |                                                          | -    |
 | `/api/users/me`                | `GET`  | Get the info of the user      |                                                          | -    |
 | `/api/users/new-refresh-token` | `GET`  | Generates a new refresh token |                                                          | -    |
 
