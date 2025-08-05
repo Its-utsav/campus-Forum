@@ -2,23 +2,21 @@ import { useCallback, useEffect, useState } from "react";
 import { RouterContext } from "../context/Router.context";
 
 export const RouterProvider = ({ children }) => {
-  const [path, setPath] = useState(window.location.pathname);
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
-    const onPopState = () => setPath(window.location.pathname);
+    const onPopState = () => setCurrentPath(window.location.pathname);
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  // to -> path to navigate /login -> localhost:8000/login
-
   const navigate = useCallback((to) => {
     history.pushState({}, "", to);
-    setPath(to);
+    setCurrentPath(to);
   }, []);
 
   return (
-    <RouterContext.Provider value={{ path, navigate }}>
+    <RouterContext.Provider value={{ currentPath, navigate }}>
       {children}
     </RouterContext.Provider>
   );
