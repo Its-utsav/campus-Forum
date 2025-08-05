@@ -19,7 +19,6 @@ export default function Header() {
       .logout()
       .then(() => logout())
       .catch(() => {});
-    logout();
   };
   const navItems = [
     {
