@@ -26,6 +26,11 @@ app.use(
 
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+	res.set("Cache-Control", "max-age=300");
+	next();
+});
+
 import usersRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import answerRoutes from "./routes/answer.routes.js";
