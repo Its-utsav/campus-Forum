@@ -50,7 +50,7 @@ const getAllPost = asyncHandler(async (req, res) => {
 /** @param {Req} req @param {Res} res @param {Next} next */
 const getPost = asyncHandler(async (req, res) => {
 	const postId = req.params.postId;
-
+	const userId = req.user?._id;
 	if (!postId) {
 		throw new ApiError(400, "postid is required");
 	}
@@ -58,9 +58,6 @@ const getPost = asyncHandler(async (req, res) => {
 		throw new ApiError(404, "invalid post id");
 	}
 
-	// const post = await Post.findById(postId);
-
-	// TODO : complete it
 	const post = await Post.aggregate([
 		{
 			$match: {
@@ -106,6 +103,19 @@ const getPost = asyncHandler(async (req, res) => {
 			$addFields: {
 				totalAnswer: {
 					$size: "$answers",
+				},
+				isAnswerByUser: {
+					$in: [
+						new mongoose.Types.ObjectId(userId), // what i have to find
+						// where
+						{
+							$map: {
+								input: "$answers",
+								as: "answer",
+								in: "$$answer.autherInfo._id",
+							},
+						},
+					],
 				},
 			},
 		},
