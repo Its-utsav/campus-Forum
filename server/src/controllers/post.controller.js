@@ -19,26 +19,50 @@ const createAPost = asyncHandler(async (req, res) => {
 	let { body } = req.body;
 
 	if (!body || checkEmpty(body)) {
-		throw new ApiError(400, "post is required");
+		throw new ApiError(400, "post content is required");
 	}
 	body = body?.trim();
 
 	if (!validLength(body, 10)) {
-		throw new ApiError(400, "post must have atleast 10 characters");
+		throw new ApiError(400, "post content must have atleast 10 characters");
 	}
 	const userId = req.user?._id;
 
 	const newPost = await Post.create({
 		body,
-		authorId: userId,
+		authorId: new mongoose.Types.ObjectId(userId),
 	});
 
 	return res.status(201).json(new ApiResponse(201, newPost, "post created"));
 });
 
 /** @param {Req} req @param {Res} res @param {Next} next */
-const getAllPost = asyncHandler(async (req, res) => {
-	const allPost = await Post.find({});
+const getAllPost = asyncHandler(async (_, res) => {
+	const allPost = await Post.aggregate([
+		{
+			$match: {},
+		},
+		{
+			$lookup: {
+				from: "users",
+				localField: "authorId",
+				foreignField: "_id",
+				as: "authorInfo",
+				pipeline: [
+					{
+						$project: {
+							username: 1,
+							_id: 0,
+						},
+					},
+				],
+			},
+		},
+		{
+			$unwind: "$authorInfo",
+		},
+	]);
+	// const allPost = await Post.find({});
 
 	if (!allPost || allPost.length === 0) {
 		throw new ApiError(404, "no post are found");
@@ -61,15 +85,16 @@ const getPost = asyncHandler(async (req, res) => {
 	const post = await Post.aggregate([
 		{
 			$match: {
-				_id: new mongoose.Types.ObjectId(postId),
+				_id: new mongoose.Types.ObjectId(postId), // match postid
 			},
 		},
 		{
+			// get answer
 			$lookup: {
 				from: "answers",
-				as: "answers",
 				localField: "_id",
 				foreignField: "postId",
+				as: "answers",
 				pipeline: [
 					{
 						$project: {
@@ -118,6 +143,25 @@ const getPost = asyncHandler(async (req, res) => {
 					],
 				},
 			},
+		},
+		{
+			$lookup: {
+				from: "users",
+				localField: "authorId",
+				foreignField: "_id",
+				as: "authorInfo",
+				pipeline: [
+					{
+						$project: {
+							username: 1,
+							_id: 0,
+						},
+					},
+				],
+			},
+		},
+		{
+			$unwind: "$authorInfo",
 		},
 	]);
 	if (!post || post.length === 0) {
