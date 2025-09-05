@@ -1,34 +1,19 @@
-import { useRouter } from "../context/Router.context";
+import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "../context/User.context";
 
-export default function AuthComponent(props) {
-  const { children } = props;
-  const { navigate, currentPath } = useRouter();
-  const { data } = useAuth();
-  // const userData = JSON.parse(localStorage.getItem("userData")) ?? false;
+export default function AuthComponent({ children }) {
+  const { pathname } = useLocation();
+  const { data: userData } = useAuth();
 
-  // useEffect(() => {
-  const isAuthenticate = data;
+  const isAuthenticate = !!userData;
 
-  // console.log(isAuthenticate, path);
-  if (
-    !isAuthenticate &&
-    currentPath !== "/login" &&
-    currentPath !== "/register"
-  ) {
-    // console.log("go to login");
-    navigate("/login");
-    return null;
+  if (!isAuthenticate && pathname !== "/login" && pathname !== "/register") {
+    return <Navigate to="/login" replace />;
   }
-  if (
-    isAuthenticate &&
-    (currentPath === "/login" || currentPath === "/register")
-  ) {
-    // console.log("go to home");
-    navigate("/");
-    return null;
-  }
-  // }, [data, currentPath, navigate]);
 
-  return children;
+  if (isAuthenticate && (pathname === "/login" || pathname === "/register")) {
+    console.log("redirect");
+    return <Navigate to="/" replace />;
+  }
+  return <Outlet />;
 }

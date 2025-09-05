@@ -1,5 +1,5 @@
+import { Link } from "react-router";
 import Button from "./Button";
-import Link from "./Link";
 
 /**
  *
@@ -9,11 +9,11 @@ import Link from "./Link";
 export default function CardComponents(props) {
   const { postBody } = props;
   return (
-    <div className="card">
+    <div className="card bg-light border-secondary">
       <div className="card-body">
         <p className="card-text">{postBody.body}</p>
         <Link href={`/posts/${postBody._id}`}>
-          <Button className="btn btn-primary">Give answer</Button>
+          <Button className="btn btn-primary">Check answers</Button>
         </Link>
       </div>
     </div>

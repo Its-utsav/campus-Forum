@@ -1,12 +1,10 @@
 import { useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { useRouter } from "../context/Router.context";
-import authService from "../services/auth.services";
 import { useAuth } from "../context/User.context";
+import authService from "../services/auth.services";
 
 export default function LoginPage() {
-  const { navigate } = useRouter();
   const { data, login } = useAuth();
 
   const [userData, setUserData] = useState({

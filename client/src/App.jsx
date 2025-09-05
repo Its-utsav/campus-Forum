@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import Header from "./components/Header";
+import { Outlet } from "react-router";
+import { Footer, Header } from "./components";
 import { useAuth } from "./context/User.context";
-import Navigations from "./components/Navigations";
 import authService from "./services/auth.services";
 
 function App() {
@@ -20,8 +20,9 @@ function App() {
     <>
       <Header />
       <main className="container">
-        <Navigations />
+        <Outlet />
       </main>
+      <Footer />
     </>
   );
 }

@@ -1,7 +1,7 @@
+import { Link } from "react-router";
 import { useAuth } from "../context/User.context.js";
 import authService from "../services/auth.services.js";
 import Button from "./Button.jsx";
-import Link from "./Link";
 
 function Logout({ onClick }) {
   return (
@@ -47,10 +47,7 @@ export default function Header() {
     <header>
       <nav className="navbar bg-body-tertiary">
         <div className="container-fluid">
-          {/* <a className="navbar-brand" href="#">
-            <p>Campus Forum</p>
-          </a> */}
-          <Link className="navbar-brand" href="/">
+          <Link to="/" className="navbar-brand">
             Campus Forum
           </Link>
 
@@ -60,7 +57,7 @@ export default function Header() {
                 (item) =>
                   item.isActive && (
                     <li className="nav-item" key={item.name}>
-                      <Link className="nav-link active" href={item.path}>
+                      <Link className="nav-link active" to={item.path}>
                         {item.name}
                       </Link>
                     </li>

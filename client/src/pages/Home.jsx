@@ -3,7 +3,7 @@ import postService from "../services/post.services";
 import CardComponents from "../components/CardComponents";
 import Loading from "../components/Loading";
 
-export default function Home() {
+export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
