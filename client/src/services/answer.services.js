@@ -15,7 +15,7 @@ class AnswerService {
         body: JSON.stringify(answerBody),
         credentials: "include",
         headers: {
-          "Content-Type": "application-json",
+          "Content-Type": "application/json",
         },
       });
       const resData = await res.json();
@@ -40,7 +40,7 @@ class AnswerService {
         method: "POST",
         credentials: "include",
         headers: {
-          "Content-Type": "application-json",
+          "Content-Type": "application/json",
         },
       });
       const resData = await res.json();

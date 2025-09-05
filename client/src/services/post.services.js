@@ -14,7 +14,7 @@ class PostService {
         body: JSON.stringify(postData),
         credentials: "include",
         headers: {
-          "Content-Type": "application-json",
+          "Content-Type": "application/json",
         },
       });
       const resData = await res.json();
@@ -36,7 +36,7 @@ class PostService {
         method: "GET",
         credentials: "include",
         headers: {
-          "Content-Type": "application-json",
+          "Content-Type": "application/json",
         },
       });
       const resData = await res.json();
@@ -64,7 +64,7 @@ class PostService {
 
         credentials: "include",
         headers: {
-          "Content-Type": "application-json",
+          "Content-Type": "application/json",
         },
       });
       const resData = await res.json();
@@ -89,7 +89,7 @@ class PostService {
         method: "DELETE",
         credentials: "include",
         headers: {
-          "Content-Type": "application-json",
+          "Content-Type": "application/json",
         },
       });
       const resData = await res.json();
