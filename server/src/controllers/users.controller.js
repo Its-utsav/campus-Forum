@@ -5,6 +5,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/AsyncHandler.js";
 import { generateAccessAndRefreshToken } from "../utils/common.js";
 import { checkEmpty, isValidEmail, validLength } from "../utils/validation.js";
+import { isValidObjectId } from "mongoose";
 
 const signUp = asyncHandler(async (req, res) => {
 	/**
@@ -44,10 +45,11 @@ const signUp = asyncHandler(async (req, res) => {
 			},
 		],
 	});
+
 	let findBy = "";
 	if (existingUser) {
-		if (existingUser.username) findBy = "username";
-		if (existingUser.email) findBy = "email";
+		if (existingUser.username === username) findBy = "username";
+		if (existingUser.email === email) findBy = "email";
 		throw new ApiError(400, `user already exists with ${findBy}`);
 	}
 
@@ -108,12 +110,12 @@ const login = asyncHandler(async (req, res) => {
 		.cookie("accessToken", accessToken, {
 			httpOnly: true,
 			secure: true,
-			maxAge: 5 * 24 * 60 * 60 * 1000,
+			maxAge: 5 * 24 * 60 * 60 * 1000, // valid for 5 days
 		})
 		.cookie("refreshToken", refreshToken, {
 			httpOnly: true,
 			secure: true,
-			maxAge: 30 * 24 * 60 * 60 * 1000,
+			maxAge: 30 * 24 * 60 * 60 * 1000, // valid for 30 days
 		})
 		.json(new ApiResponse(200, userObj, "user Logged in successfully"));
 });
@@ -155,6 +157,9 @@ const getUserInfo = asyncHandler(async (req, res) => {
 
 	if (!userId) {
 		throw new ApiError(400, "userid is required");
+	}
+	if (!isValidObjectId(userId)) {
+		throw new ApiError(400, "Invalid userid");
 	}
 
 	const user = await User.findById(userId)
@@ -218,12 +223,12 @@ const newRefreshToken = asyncHandler(async (req, res) => {
 			.cookie("accessToken", accessToken, {
 				httpOnly: true,
 				secure: true,
-				maxAge: 5 * 24 * 60 * 60 * 1000,
+				maxAge: 5 * 24 * 60 * 60 * 1000, // 5 days
 			})
 			.cookie("refreshToken", refreshToken, {
 				httpOnly: true,
 				secure: true,
-				maxAge: 30 * 24 * 60 * 60 * 1000,
+				maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
 			})
 			.json(new ApiResponse(200, {}, "New Refresh token created"));
 	} catch (error) {
