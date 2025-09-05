@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import authService from "../services/auth.services";
-import Loading from "../components/Loading";
+import { Loading } from "../components/";
 
 export default function AboutMe() {
   const [userData, setUserData] = useState({});

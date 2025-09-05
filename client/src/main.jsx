@@ -18,6 +18,8 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route path="*" element={<h1>Not Found</h1>} />
       <Route index element={<HomePage />} />
+
+      {/* Page are only avialabel when user is not login */}
       <Route element={<GuestOnly />}>
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -34,7 +36,6 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <UserProvider>
       <RouterProvider router={router} />
-      {/* <App /> */}
     </UserProvider>
   </StrictMode>
 );

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import postService from "../services/post.services";
-import CardComponents from "../components/CardComponents";
-import Loading from "../components/Loading";
+import { Loading, CardComponents } from "../components";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);

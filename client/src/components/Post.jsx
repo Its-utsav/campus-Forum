@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "./Route";
 import postService from "../services/post.services";
+import { useParams } from "react-router";
 
 export default function Post() {
   const { postID } = useParams();
