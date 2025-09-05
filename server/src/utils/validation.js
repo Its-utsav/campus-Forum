@@ -19,6 +19,6 @@ const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
  * @param {string} email
  * @returns
  */
-const isValidEmail = (email) => emailPattern?.test(email);
+const isValidEmail = (email) => email && emailPattern.test(email);
 
 export { checkEmpty, validLength, isValidEmail };

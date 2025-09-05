@@ -34,11 +34,13 @@ app.use((req, res, next) => {
 import usersRoutes from "./routes/user.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import answerRoutes from "./routes/answer.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 import GlobalErrorHandler from "./utils/GlobalError.js";
 
 app.use("/api/users", usersRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/answer", answerRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(GlobalErrorHandler);
 
