@@ -171,9 +171,30 @@ const getPost = asyncHandler(async (req, res) => {
 });
 /** @param {Req} req @param {Res} res @param {Next} next */
 const deletePost = asyncHandler(async (req, res) => {
-	return res.json({
-		msg: "Implementation is pending",
-	});
+	const postId = req.params.postId;
+	const userId = req.user?._id;
+
+	if (!postId) {
+		throw new ApiError(400, "postid is required");
+	}
+	if (!isValidObjectId(postId)) {
+		throw new ApiError(404, "invalid post id");
+	}
+
+	const post = await Post.findById(postId);
+	if (!post) {
+		throw new ApiError(404, "Post not found");
+	}
+
+	if (post.authorId.toString() !== userId.toString()) {
+		throw new ApiError(401, "unauthorized this post not belongs to you");
+	}
+
+	await Post.findByIdAndDelete(postId);
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, {}, "Post delete successfully"));
 });
 
 export { createAPost, deletePost, getAllPost, getPost };
