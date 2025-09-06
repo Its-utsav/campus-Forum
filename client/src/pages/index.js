@@ -1,17 +1,12 @@
-import HomePage from "./Home";
-import LoginPage from "./Login";
-import SignUpPage from "./SignUp";
 import AboutMe from "./AboutMe";
-import RaiseQuery from "./RaiseQuery";
-import PostInfo from "./PostInfo";
+import HomePage from "./Home";
 import HomePageForVisiters from "./HomePageForVisiters";
+import LoginPage from "./Login";
+import PostInfo from "./PostInfo";
+import RaiseQuery from "./RaiseQuery";
+import SignUpPage from "./SignUp";
 
 export {
-  HomePage,
-  SignUpPage,
-  LoginPage,
-  AboutMe,
-  RaiseQuery,
-  PostInfo,
-  HomePageForVisiters,
+  AboutMe, HomePage, HomePageForVisiters, LoginPage, PostInfo, RaiseQuery, SignUpPage
 };
+

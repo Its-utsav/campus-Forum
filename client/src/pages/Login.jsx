@@ -1,19 +1,55 @@
 import { useState } from "react";
-import { Input, Button } from "../components";
+import { Input, Button, AlertMessage } from "../components";
 import { useAuth } from "../context/User.context";
 import authService from "../services/auth.services";
 
 export default function LoginPage() {
-  const { data, login } = useAuth();
+  const { login } = useAuth();
 
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
   const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  const validateForm = () => {
+    const newErrors = {
+      email: "",
+      password: "",
+    };
+
+    if (!userData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(userData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!userData.password) {
+      newErrors.password = "Password is required";
+    } else if (userData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters long";
+    }
+
+    setErrors(newErrors);
+
+    return !newErrors.email && !newErrors.password;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setMessage("");
+
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       await authService
         .login(userData)
@@ -22,6 +58,27 @@ export default function LoginPage() {
         .catch((reason) => setMessage(reason.message));
     } catch (error) {
       console.log(error);
+      setMessage(
+        error.message || "An unexpected error occurred. Please try again."
+      );
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    const email = e.target.value;
+    setUserData((prevData) => ({ ...prevData, email }));
+
+    if (errors.email) {
+      setErrors((prevErrors) => ({ ...prevErrors, email: "" }));
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const password = e.target.value;
+    setUserData((prevData) => ({ ...prevData, password }));
+
+    if (errors.password) {
+      setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
     }
   };
 
@@ -34,28 +91,25 @@ export default function LoginPage() {
           required
           autoComplete="email"
           value={userData.email}
-          onChange={(e) =>
-            setUserData((prevData) => ({ ...prevData, email: e.target.value }))
-          }
+          onChange={handleEmailChange}
         />
+        {errors.email && <AlertMessage text={errors.email} />}
+
         <Input
           label="password"
           type="password"
           required
-          autoComplete="password"
+          autoComplete="current-password"
           value={userData.password}
-          onChange={(e) =>
-            setUserData((prevData) => ({
-              ...prevData,
-              password: e.target.value,
-            }))
-          }
+          onChange={handlePasswordChange}
         />
 
+        {errors.password && <AlertMessage text={errors.password} />}
         <Button className="btn-primary" type="submit">
           Login !!
         </Button>
-        {message && <p>{message}</p>}
+
+        {message && <AlertMessage text={message} />}
       </form>
     </div>
   );
