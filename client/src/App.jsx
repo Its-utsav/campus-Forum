@@ -1,11 +1,13 @@
 import { useEffect } from "react";
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 import { Footer, Header } from "./components";
 import { useAuth } from "./context/User.context";
 import authService from "./services/auth.services";
+import { HomePageForVisiters } from "./pages";
 
 function App() {
-  const { login, logout } = useAuth();
+  const { login, logout, data } = useAuth();
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userData")) ?? false;
     if (user) {
@@ -16,6 +18,7 @@ function App() {
       });
     }
   }, []);
+
   return (
     <>
       <Header />

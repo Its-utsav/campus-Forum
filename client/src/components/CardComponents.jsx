@@ -12,7 +12,7 @@ export default function CardComponents(props) {
     <div className="card bg-light border-secondary">
       <div className="card-body">
         <p className="card-text">{postBody.body}</p>
-        <Link href={`/posts/${postBody._id}`}>
+        <Link to={`/posts/${postBody._id}`}>
           <Button className="btn btn-primary">Check answers</Button>
         </Link>
       </div>

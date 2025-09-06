@@ -7,6 +7,7 @@ import Loading from "./Loading";
 import Button from "./Button";
 import Post from "./Post";
 import CardComponents from "./CardComponents";
+import InlineAnswerBox from "./InlineAnswerBox";
 
 export {
   Header,
@@ -18,4 +19,5 @@ export {
   Button,
   Post,
   CardComponents,
+  InlineAnswerBox,
 };

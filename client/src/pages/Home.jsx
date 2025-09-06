@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import postService from "../services/post.services";
 import { Loading, CardComponents } from "../components";
+import { useAuth } from "../context/User.context";
+import { Navigate } from "react-router";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -8,6 +10,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [totalPost, setTotalPost] = useState(0);
 
+  const { data } = useAuth();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,6 +32,10 @@ export default function HomePage() {
     setTotalPost(posts.length);
   }, [posts]);
 
+  if (!data) {
+    console.log("NO data found");
+    return <Navigate to={"/no-logged-in"} replace />;
+  }
   return (
     <>
       {loading ? (
@@ -44,7 +51,7 @@ export default function HomePage() {
           </p>
 
           {posts.map((post) => (
-            <div key={post._id}>
+            <div key={post._id} className="mt-2">
               <CardComponents key={post._id} postBody={post} />
             </div>
           ))}

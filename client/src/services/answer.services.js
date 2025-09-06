@@ -10,7 +10,7 @@ class AnswerService {
    */
   async postAnswer({ answerBody, postId }) {
     try {
-      const res = await fetch(`${this.BASE_URL}/api/posts/answer/${postId}`, {
+      const res = await fetch(`${this.BASE_URL}/posts/answer/${postId}`, {
         method: "POST",
         body: JSON.stringify(answerBody),
         credentials: "include",
@@ -36,7 +36,7 @@ class AnswerService {
    */
   async getAnswer(postId) {
     try {
-      const res = await fetch(`${this.BASE_URL}/api/posts/answer/${postId}`, {
+      const res = await fetch(`${this.BASE_URL}/posts/answer/${postId}`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -59,7 +59,7 @@ class AnswerService {
    */
   async deleteAnswer(postId) {
     try {
-      const res = await fetch(`${this.BASE_URL}/api/posts/answer/${postId}`, {
+      const res = await fetch(`${this.BASE_URL}/posts/answer/${postId}`, {
         method: "POST",
         credentials: "include",
         headers: {

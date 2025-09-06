@@ -22,6 +22,11 @@ export default function Header() {
   };
   const navItems = [
     {
+      name: "Raise Query",
+      path: "raise-query",
+      isActive: data,
+    },
+    {
       name: "My Answer",
       path: "my-answer",
       isActive: data,
@@ -38,7 +43,7 @@ export default function Header() {
     },
     {
       name: "Register",
-      path: "/register",
+      path: "/signup",
       isActive: !data,
     },
   ];
