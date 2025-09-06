@@ -10,7 +10,7 @@ import authMiddleware from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.post("/singup", signUp);
+router.post("/signup", signUp);
 router.post("/login", login);
 router.get("/new-refresh-token", newRefreshToken);
 
