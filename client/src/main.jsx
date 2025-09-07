@@ -23,8 +23,6 @@ import {
 } from "./pages/index.js";
 
 import { LoginPage as AdminLogin } from "./pages/admin/";
-import Dashboard from "./pages/admin/Dashboard.jsx";
-import AdminApp from "./admin/App.jsx";
 import { adminRoutes } from "./routes/adminRoutes.jsx";
 
 const router = createBrowserRouter(

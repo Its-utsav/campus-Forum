@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, data } = useAuth();
 
   const [userData, setUserData] = useState({
     email: "",
@@ -57,7 +57,7 @@ export default function LoginPage() {
       if (data) {
         console.log(data);
         login({ email: data.email, role: "admin" });
-        then(() => navigate("/admin", { replace: true }));
+        navigate("/admin", { replace: true });
       }
     } catch (error) {
       console.log(error);
@@ -66,7 +66,7 @@ export default function LoginPage() {
       );
     }
   };
-
+  console.log("Auth", data);
   const handleEmailChange = (e) => {
     const email = e.target.value;
     setUserData((prevData) => ({ ...prevData, email }));

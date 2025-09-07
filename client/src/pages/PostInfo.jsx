@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router";
+import { useParams } from "react-router";
 import postService from "../services/post.services";
 import { InlineAnswerBox, Loading } from "../components";
 
 export default function PostInfo() {
   const { postId } = useParams();
 
-  console.log(useLocation());
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState({
@@ -46,7 +45,7 @@ export default function PostInfo() {
     };
     fetchPost();
   }, [postId]);
-  console.log(postId);
+
   if (loading) {
     return <Loading />;
   }
