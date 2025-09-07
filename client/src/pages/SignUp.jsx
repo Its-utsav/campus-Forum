@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertMessage, Button, Input } from "../components";
+import { AlertMessage, AuthNavigation, Button, Input } from "../components";
 import authService from "../services/auth.services";
 import { useNavigate } from "react-router";
 
@@ -16,7 +16,7 @@ export default function Register() {
     email: "",
     password: "",
   });
-  console.log(errors);
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const usernameRegex = /^[a-zA-Z_-]{3,20}$/;
@@ -126,6 +126,7 @@ export default function Register() {
 
   return (
     <div>
+      <AuthNavigation value={"Register"} />
       <form onSubmit={handleSubmit}>
         <Input
           label="username"

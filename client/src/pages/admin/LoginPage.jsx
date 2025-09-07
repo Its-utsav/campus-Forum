@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Input, Button, AlertMessage, AuthNavigation } from "../components";
-import { useAuth } from "../context/User.context";
-import authService from "../services/auth.services";
+import { AlertMessage, Button, Input } from "../../components";
+import { useAuth } from "../../context/User.context";
+import adminService from "../../services/admin.services";
+import { useNavigate } from "react-router";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const { login } = useAuth();
 
   const [userData, setUserData] = useState({
@@ -32,8 +34,8 @@ export default function LoginPage() {
 
     if (!userData.password) {
       newErrors.password = "Password is required";
-    } else if (userData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters long";
+    } else if (userData.password.length < 4) {
+      newErrors.password = "Password must be at least 4 characters long";
     }
 
     setErrors(newErrors);
@@ -51,11 +53,12 @@ export default function LoginPage() {
     }
 
     try {
-      await authService
-        .login(userData)
-        .then((data) => login({ _id: data._id, username: data.username }))
-        .then(() => navigate("/"))
-        .catch((reason) => setMessage(reason.message));
+      const data = await adminService.login(userData);
+      if (data) {
+        console.log(data);
+        login({ email: data.email, role: "admin" });
+        then(() => navigate("/admin", { replace: true }));
+      }
     } catch (error) {
       console.log(error);
       setMessage(
@@ -84,7 +87,7 @@ export default function LoginPage() {
 
   return (
     <div>
-      <AuthNavigation value={"login"} />
+      <h1>Admin Login</h1>
       <form onSubmit={handleSubmit}>
         <Input
           label="email"

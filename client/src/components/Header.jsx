@@ -46,6 +46,11 @@ export default function Header() {
       path: "/signup",
       isActive: !data,
     },
+    {
+      name: "Admin Login",
+      path: "/admin-login",
+      isActive: !data,
+    },
   ];
 
   return (

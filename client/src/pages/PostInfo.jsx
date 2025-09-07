@@ -5,7 +5,7 @@ import { InlineAnswerBox, Loading } from "../components";
 
 export default function PostInfo() {
   const { postId } = useParams();
-  const { search } = useLocation();
+
   console.log(useLocation());
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
