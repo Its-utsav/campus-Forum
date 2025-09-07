@@ -3,14 +3,76 @@ import User from "../models/user.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import { isValidObjectId } from "mongoose";
+import { isValidEmail, validLength } from "../utils/validation.js";
+import { generateAccessTokenForAdmin } from "../utils/common.js";
+
+const ADMIN_EMAIL = "admin@cf.edu";
+const ADMIN_PASSWORD = "1234";
+
+const handleLogin = asyncHandler(async (req, res) => {
+	if (!req.body) {
+		throw new ApiError(
+			400,
+			"email and password are require for authentication",
+		);
+	}
+	const { email, password } = req.body;
+	if (!isValidEmail(email)) {
+		throw new ApiError(400, "Invalid email address");
+	}
+
+	if (!validLength(password, 4)) {
+		throw new ApiError(400, "Password must be eight character long");
+	}
+
+	if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+		throw new ApiError(401, "Invalid credentials please try again");
+	}
+
+	const token = generateAccessTokenForAdmin(email);
+	return res
+		.status(200)
+		.cookie("accessToken", token, {
+			httpOnly: true,
+			secure: true,
+			maxAge: 60 * 60 * 1000, // valid for one hour only
+		})
+		.json(new ApiResponse(200, {}, "Admin logged in successfully"));
+});
+
+const handleLogout = asyncHandler(async (req, res) => {
+	const incommingToken = req.cookies?.accessToken;
+
+	if (!incommingToken) {
+		throw new ApiError(401, "Token missing failed ");
+	}
+	return res
+		.status(200)
+		.clearCookie("accessToken")
+		.set("Clear-Site-Data", '"cookies", "storage", "cache"')
+		.json(new ApiResponse(200, {}, "admin logout successfully"));
+});
+
 const getAllUsers = asyncHandler(async (req, res) => {
-	const allUsers = await User.aggregate({
-		$match: {},
-		$project: {
-			refreshToken: 0,
-			password: 0,
+	const allUsers = await User.aggregate([
+		{
+			$facet: {
+				users: [
+					{
+						$project: {
+							refreshToken: 0,
+							password: 0,
+						},
+					},
+				],
+				totalUsers: [
+					{
+						$count: "count",
+					},
+				],
+			},
 		},
-	});
+	]);
 	return res
 		.status(200)
 		.json(new ApiResponse(200, allUsers, "user found successfully"));
@@ -26,7 +88,7 @@ const getUser = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "invalid user id");
 	}
 
-	const user = await User.findById(userId).lean();
+	const user = await User.findById(userId);
 	if (!user) {
 		throw new ApiError(404, "User not found");
 	}
@@ -52,4 +114,4 @@ const getPost = asyncHandler((req, res) => {
 	});
 });
 
-export { getAllUsers, getUser, getAllPost, getPost };
+export { getAllUsers, getUser, getAllPost, getPost, handleLogin, handleLogout };

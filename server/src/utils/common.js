@@ -1,5 +1,7 @@
 import User from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
+import jwt from "jsonwebtoken";
+
 /**
  * @param {import("mongoose").ObjectId} id
  * @returns {Promise<{accessToken:string,refreshToken:string}>}
@@ -20,4 +22,20 @@ const generateAccessAndRefreshToken = async (id) => {
 	return { refreshToken, accessToken };
 };
 
-export { generateAccessAndRefreshToken };
+const generateAccessTokenForAdmin = (email) => {
+	try {
+		return jwt.sign(
+			{
+				email,
+			},
+			process.env.REFRESH_TOKEN,
+			{
+				expiresIn: 60 * 60 * 1000, // valid for one hour only
+			},
+		);
+	} catch (error) {
+		console.error("Error while generating Access Token", error);
+	}
+};
+
+export { generateAccessAndRefreshToken, generateAccessTokenForAdmin };
