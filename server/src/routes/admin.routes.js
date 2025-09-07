@@ -12,12 +12,14 @@ const router = Router();
 
 router.route("/login").post(handleLogin);
 
-router.route("/logout").post(adminMiddleware, handleLogout);
+router.use(adminMiddleware);
 
-router.get("/users", adminMiddleware, getAllUsers);
-router.get("/users/:userId", adminMiddleware, getUser);
+router.route("/logout").post(handleLogout);
 
-router.get("/posts", adminMiddleware, getAllPost);
-router.get("/posts/:postId", adminMiddleware, getPost);
+router.get("/users", getAllUsers);
+router.get("/users/:userId", getUser);
+
+router.get("/posts", getAllPost);
+router.route("/posts/:postId").get(getPost);
 
 export default router;

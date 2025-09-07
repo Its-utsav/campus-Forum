@@ -1,11 +1,12 @@
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/AsyncHandler.js";
 import jwt from "jsonwebtoken";
+
 const ADMIN_EMAIL = "admin@cf.edu";
 const ADMIN_PASSWORD = "1234";
 
-const adminMiddleware = asyncHandler(async (req, res, next) => {
-	console.log("at middleware", req.originalUrl);
+const adminMiddleware = (req, res, next) => {
+	console.log("at middleware", req.originalUrl, req.method);
 	try {
 		const incommingAccessToken =
 			req.cookies?.accessToken ||
@@ -26,6 +27,6 @@ const adminMiddleware = asyncHandler(async (req, res, next) => {
 	} catch (error) {
 		throw new ApiError(401, error.message || "invalid access token");
 	}
-});
+};
 
 export default adminMiddleware;

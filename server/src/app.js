@@ -43,5 +43,10 @@ app.use("/api/answer", answerRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use(GlobalErrorHandler);
-
+app.use(function (req, res, next) {
+	res.status(404).json({
+		message: "Route not found",
+	});
+	return next();
+});
 export default app;
