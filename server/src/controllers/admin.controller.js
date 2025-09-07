@@ -37,7 +37,15 @@ const handleLogin = asyncHandler(async (req, res) => {
 			secure: true,
 			maxAge: 60 * 60 * 1000, // valid for one hour only
 		})
-		.json(new ApiResponse(200, {}, "Admin logged in successfully"));
+		.json(
+			new ApiResponse(
+				200,
+				{
+					email: ADMIN_EMAIL,
+				},
+				"Admin logged in successfully",
+			),
+		);
 });
 
 const handleLogout = asyncHandler(async (req, res) => {
