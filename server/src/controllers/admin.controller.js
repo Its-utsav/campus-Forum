@@ -83,7 +83,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
 	]);
 	return res
 		.status(200)
-		.json(new ApiResponse(200, allUsers, "user found successfully"));
+		.json(new ApiResponse(200, allUsers[0], "user found successfully"));
 });
 
 const getUser = asyncHandler(async (req, res) => {

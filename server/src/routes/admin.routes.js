@@ -17,7 +17,7 @@ router.use(adminMiddleware);
 router.route("/logout").post(handleLogout);
 
 router.get("/users", getAllUsers);
-router.get("/users/:userId", getUser);
+router.route("/users/:userId").get(getUser);
 
 router.get("/posts", getAllPost);
 router.route("/posts/:postId").get(getPost);
