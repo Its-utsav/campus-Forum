@@ -5,6 +5,8 @@ import ApiError from "../utils/ApiError.js";
 import { isValidObjectId } from "mongoose";
 import { isValidEmail, validLength } from "../utils/validation.js";
 import { generateAccessTokenForAdmin } from "../utils/common.js";
+import Post from "../models/post.model.js";
+import Answer from "../models/answer.model.js";
 
 const ADMIN_EMAIL = "admin@cf.edu";
 const ADMIN_PASSWORD = "1234";
@@ -83,7 +85,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
 	]);
 	return res
 		.status(200)
-		.json(new ApiResponse(200, allUsers[0], "user found successfully"));
+		.json(new ApiResponse(200, allUsers[0], "users found successfully"));
 });
 
 const getUser = asyncHandler(async (req, res) => {
@@ -110,16 +112,96 @@ const getUser = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, userObj, "user data fetch successfully"));
 });
 
-const getAllPost = asyncHandler((req, res) => {
-	return res.status(200).json({
-		message: "Hi",
-	});
+const deleteUser = asyncHandler(async (req, res) => {
+	const { userId } = req.params;
+	if (!isValidObjectId(userId)) {
+		throw new ApiError(400, "Invalid user ID");
+	}
+
+	const deletedUser = await User.findByIdAndDelete(userId);
+
+	if (!deletedUser) {
+		throw new ApiError(404, "User not found");
+	}
+
+	// Also delete posts and answers by this user
+	await Post.deleteMany({ author: userId });
+	await Answer.deleteMany({ author: userId });
+
+	return res
+		.status(200)
+		.json(
+			new ApiResponse(
+				200,
+				{},
+				"User and associated data deleted successfully",
+			),
+		);
 });
 
-const getPost = asyncHandler((req, res) => {
-	return res.status(200).json({
-		message: "Hi",
-	});
+const deletePost = asyncHandler(async (req, res) => {
+	const { postId } = req.params;
+	if (!isValidObjectId(postId)) {
+		throw new ApiError(400, "Invalid post ID");
+	}
+
+	const deletedPost = await Post.findByIdAndDelete(postId);
+
+	if (!deletedPost) {
+		throw new ApiError(404, "Post not found");
+	}
+
+
+	await Answer.deleteMany({ post: postId });
+
+	return res
+		.status(200)
+		.json(
+			new ApiResponse(
+				200,
+				{},
+				"Post and associated answers deleted successfully",
+			),
+		);
 });
 
-export { getAllUsers, getUser, getAllPost, getPost, handleLogin, handleLogout };
+const deleteAnswer = asyncHandler(async (req, res) => {
+	const { answerId } = req.params;
+	if (!isValidObjectId(answerId)) {
+		throw new ApiError(400, "Invalid answer ID");
+	}
+
+	const deletedAnswer = await Answer.findByIdAndDelete(answerId);
+
+	if (!deletedAnswer) {
+		throw new ApiError(404, "Answer not found");
+	}
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, {}, "Answer deleted successfully"));
+});
+
+// const getAllPost = asyncHandler((req, res) => {
+// 	return res.status(200).json({
+// 		message: "Hi",
+// 	});
+// });
+
+// const getPost = asyncHandler((req, res) => {
+// 	return res.status(200).json({
+// 		message: "Hi",
+// 	});
+// });
+
+export {
+	getAllUsers,
+	getUser,
+	// getAllPost,
+	// getPost,
+	handleLogin,
+	handleLogout,
+	deleteUser,
+	deletePost,
+	deleteAnswer,
+};

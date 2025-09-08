@@ -6,6 +6,9 @@ import asyncHandler from "../utils/AsyncHandler.js";
 import { generateAccessAndRefreshToken } from "../utils/common.js";
 import { checkEmpty, isValidEmail, validLength } from "../utils/validation.js";
 import { isValidObjectId } from "mongoose";
+import Answer from "../models/answer.model.js";
+import Post from "../models/post.model.js";
+
 
 const signUp = asyncHandler(async (req, res) => {
 	/**
@@ -237,4 +240,95 @@ const newRefreshToken = asyncHandler(async (req, res) => {
 	}
 });
 
-export { getUserInfo, login, logout, newRefreshToken, signUp };
+const getMyPost = asyncHandler(async (req, res) => {
+	const userId = req.user?._id;
+
+	if (!userId) {
+		throw new ApiError(400, "User ID is required");
+	}
+
+	if (!isValidObjectId(userId)) {
+		throw new ApiError(400, "Invalid User ID");
+	}
+
+	const posts = await Post.find({ author: userId }).sort({ createdAt: -1 });
+
+	if (!posts || posts.length === 0) {
+		return res
+			.status(200)
+			.json(new ApiResponse(200, [], "No posts found for this user"));
+	}
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, posts, "User posts fetched successfully"));
+});
+
+
+const deletePost = asyncHandler(async (req, res) => {
+	const userId = req.user?._id;
+	const { postId } = req.params;
+
+	if (!userId) {
+		throw new ApiError(400, "User ID is required");
+	}
+
+	if (!isValidObjectId(userId)) {
+		throw new ApiError(400, "Invalid User ID");
+	}
+
+	if (!postId || !isValidObjectId(postId)) {
+		throw new ApiError(400, "Invalid Post ID");
+	}
+
+	const post = await Post.findOne({ _id: postId, author: userId });
+
+	if (!post) {
+		throw new ApiError(404, "Post not found or you are not the author");
+	}
+
+	await Post.findByIdAndDelete(postId);
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, {}, "Post deleted successfully"));
+});
+
+
+const getMyAnswers = asyncHandler(async (req, res) => {
+	const userId = req.user?._id;
+
+	if (!userId) {
+		throw new ApiError(400, "User ID is required");
+	}
+
+	if (!isValidObjectId(userId)) {
+		throw new ApiError(400, "Invalid User ID");
+	}
+
+	const answers = await Answer.find({ author: userId })
+		.populate('post', 'title')
+		.sort({ createdAt: -1 });
+
+	if (!answers || answers.length === 0) {
+		return res
+			.status(200)
+			.json(new ApiResponse(200, [], "No answers found for this user"));
+	}
+
+	const formattedAnswers = answers.map(answer => ({
+		_id: answer._id,
+		content: answer.content,
+		post: {
+			_id: answer.post._id,
+		},
+		createdAt: answer.createdAt,
+		updatedAt: answer.updatedAt
+	}));
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, formattedAnswers, "User answers fetched successfully"));
+});
+
+export { getUserInfo, login, logout, newRefreshToken, signUp, getMyPost, deletePost, getMyAnswers };

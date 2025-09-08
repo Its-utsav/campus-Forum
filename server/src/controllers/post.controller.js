@@ -4,6 +4,7 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/AsyncHandler.js";
 import { checkEmpty, validLength } from "../utils/validation.js";
+import Answer from "../models/answer.model.js";
 
 /**
  * @typedef {import("express").Request} Req
@@ -191,10 +192,11 @@ const deletePost = asyncHandler(async (req, res) => {
 	}
 
 	await Post.findByIdAndDelete(postId);
+	await Answer.deleteMany({ postId });
 
 	return res
 		.status(200)
-		.json(new ApiResponse(200, {}, "Post delete successfully"));
+		.json(new ApiResponse(200, {}, "Post deleted successfully"));
 });
 
 export { createAPost, deletePost, getAllPost, getPost };

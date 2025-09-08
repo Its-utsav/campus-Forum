@@ -7,6 +7,7 @@ import {
 } from "../controllers/post.controller.js";
 import authMiddleware from "../middleware/auth.middleware.js";
 import { answerToTheQuestion } from "../controllers/answer.controller.js";
+import { getMyPost, deletePost as deleteUserPost } from "../controllers/users.controller.js";
 const router = Router();
 
 router.use(authMiddleware);
@@ -20,5 +21,8 @@ router
 	.delete(deletePost);
 
 router.route("/answer/:postId").post(answerToTheQuestion);
+router.route("/user/post").get(getMyPost);
+router.route("/user/post/:postId").delete(deleteUserPost);
+
 
 export default router;
