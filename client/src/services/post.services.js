@@ -104,6 +104,53 @@ class PostService {
       throw error;
     }
   }
+
+  async getMyPost() {
+    try {
+      const res = await fetch(`${this.BASE_URL}/posts/user/my-post`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const resData = await res.json();
+      if (!res.ok || !resData.data) {
+        throw new Error(
+          resData.message || "Something went wrong while fetching your posts"
+        );
+      }
+      return resData.data;
+    } catch (error) {
+      console.error("error :: getMyPost ", error);
+      throw error;
+    }
+  }
+  /**
+   *
+   * @returns {Promise<Array<any>>}
+   */
+  async getMyAnswers() {
+    try {
+      const res = await fetch(`${this.BASE_URL}/answers/user/my-answer`, { // Assuming this is the correct endpoint
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const resData = await res.json();
+      if (!res.ok || !resData.data) {
+        throw new Error(
+          resData.message || "Something went wrong while fetching your answers"
+        );
+      }
+      return resData.data;
+    } catch (error) {
+      console.error("error :: getMyAnswers ", error);
+      throw error;
+    }
+  }
 }
 
 const postService = new PostService();

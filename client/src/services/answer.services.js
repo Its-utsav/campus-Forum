@@ -55,12 +55,12 @@ class AnswerService {
   }
   /**
    *
-   * @param {string} postId
+   * @param {string} answerId
    */
-  async deleteAnswer(postId) {
+  async deleteAnswer(answerId) {
     try {
-      const res = await fetch(`${this.BASE_URL}/posts/answer/${postId}`, {
-        method: "POST",
+      const res = await fetch(`${this.BASE_URL}/answer/${answerId}`, {
+        method: "DELETE",
         credentials: "include",
         headers: {
           "Content-Type": "application-json",
@@ -75,6 +75,31 @@ class AnswerService {
       return resData.data;
     } catch (error) {
       console.error("error :: deleteAnswer ", error);
+      throw error;
+    }
+  }
+  /**
+ *
+ * @returns {Promise<Array<any>>}
+ */
+  async getMyAnswers() {
+    try {
+      const res = await fetch(`${this.BASE_URL}/answer/user/my-answers`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const resData = await res.json();
+      if (!res.ok || !resData.data) {
+        throw new Error(
+          resData.message || "Something went wrong while fetching your answers"
+        );
+      }
+      return resData.data;
+    } catch (error) {
+      console.error("error :: getMyAnswers ", error);
       throw error;
     }
   }

@@ -20,6 +20,8 @@ import {
   PostInfo,
   RaiseQuery,
   SignUpPage,
+  MyPost,
+  MyAnswer,
 } from "./pages/index.js";
 
 import { LoginPage as AdminLogin } from "./pages/admin/";
@@ -44,6 +46,8 @@ const router = createBrowserRouter(
           <Route element={<AuthComponent />}>
             <Route path="/get-info" element={<AboutMe />} />
             <Route path="/raise-query" element={<RaiseQuery />} />
+            <Route path="/my-post" element={<MyPost />} />
+            <Route path="/my-answer" element={<MyAnswer />} />
             <Route path="/posts/:postId" element={<PostInfo />} />
           </Route>
         </Route>

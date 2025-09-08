@@ -9,7 +9,6 @@ import { isValidObjectId } from "mongoose";
 import Answer from "../models/answer.model.js";
 import Post from "../models/post.model.js";
 
-
 const signUp = asyncHandler(async (req, res) => {
 	/**
 	 * @type {{username:string,email:string,password:string}}
@@ -251,19 +250,16 @@ const getMyPost = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "Invalid User ID");
 	}
 
-	const posts = await Post.find({ author: userId }).sort({ createdAt: -1 });
+	const posts = await Post.find({ authorId: userId }).sort({ createdAt: -1 });
 
 	if (!posts || posts.length === 0) {
-		return res
-			.status(200)
-			.json(new ApiResponse(200, [], "No posts found for this user"));
+		return res.status(200).json(new ApiResponse(200, [], "No posts found"));
 	}
 
 	return res
 		.status(200)
 		.json(new ApiResponse(200, posts, "User posts fetched successfully"));
 });
-
 
 const deletePost = asyncHandler(async (req, res) => {
 	const userId = req.user?._id;
@@ -281,7 +277,7 @@ const deletePost = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "Invalid Post ID");
 	}
 
-	const post = await Post.findOne({ _id: postId, author: userId });
+	const post = await Post.findOne({ _id: postId, authorId: userId });
 
 	if (!post) {
 		throw new ApiError(404, "Post not found or you are not the author");
@@ -294,7 +290,6 @@ const deletePost = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, {}, "Post deleted successfully"));
 });
 
-
 const getMyAnswers = asyncHandler(async (req, res) => {
 	const userId = req.user?._id;
 
@@ -306,8 +301,8 @@ const getMyAnswers = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "Invalid User ID");
 	}
 
-	const answers = await Answer.find({ author: userId })
-		.populate('post', 'title')
+	const answers = await Answer.find({ authorId: userId })
+		.populate("postId")
 		.sort({ createdAt: -1 });
 
 	if (!answers || answers.length === 0) {
@@ -316,19 +311,35 @@ const getMyAnswers = asyncHandler(async (req, res) => {
 			.json(new ApiResponse(200, [], "No answers found for this user"));
 	}
 
-	const formattedAnswers = answers.map(answer => ({
+	const formattedAnswers = answers.map((answer) => ({
 		_id: answer._id,
-		content: answer.content,
+		body: answer.content,
+
 		post: {
-			_id: answer.post._id,
+			_id: answer.postId._id,
 		},
 		createdAt: answer.createdAt,
-		updatedAt: answer.updatedAt
+		updatedAt: answer.updatedAt,
 	}));
 
 	return res
 		.status(200)
-		.json(new ApiResponse(200, formattedAnswers, "User answers fetched successfully"));
+		.json(
+			new ApiResponse(
+				200,
+				formattedAnswers,
+				"User answers fetched successfully",
+			),
+		);
 });
 
-export { getUserInfo, login, logout, newRefreshToken, signUp, getMyPost, deletePost, getMyAnswers };
+export {
+	getUserInfo,
+	login,
+	logout,
+	newRefreshToken,
+	signUp,
+	getMyPost,
+	deletePost,
+	getMyAnswers,
+};

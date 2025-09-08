@@ -32,6 +32,11 @@ export default function Header() {
       isActive: data,
     },
     {
+      name: "My Post",
+      path: "my-post",
+      isActive: data,
+    },
+    {
       name: "Get info",
       path: "get-info",
       isActive: data,
