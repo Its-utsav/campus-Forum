@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import postService from "../services/post.services";
 import { Loading, CardComponents } from "../components";
 import { useAuth } from "../context/User.context";
-import { Navigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -31,6 +31,15 @@ export default function HomePage() {
   useEffect(() => {
     setTotalPost(posts.length);
   }, [posts]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (data?.role === "admin") {
+      console.log("should move to admin");
+      navigate("/admin");
+    }
+  }, [data]);
+
+  console.log(data);
 
   if (!data) {
     console.log("NO data found");

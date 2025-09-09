@@ -18,9 +18,10 @@ export default function Dashboard() {
       <h2 className="mb-4">Admin Dashboard</h2>
 
       <div className="row">
+        {/* Users Section */}
         <div className="col-md-6">
           <h4>All Users</h4>
-          {users.users && (
+          {users.users && users.users.length > 0 ? (
             <ul className="list-group">
               {users.users.map((user) => (
                 <li
@@ -37,12 +38,15 @@ export default function Dashboard() {
                 </li>
               ))}
             </ul>
+          ) : (
+            <p className="text-muted">No users found.</p>
           )}
         </div>
 
+        {/* Posts Section */}
         <div className="col-md-6">
           <h4>All Posts</h4>
-          {posts && (
+          {posts && posts.length > 0 ? (
             <ul className="list-group">
               {posts.map((post) => (
                 <li
@@ -59,6 +63,8 @@ export default function Dashboard() {
                 </li>
               ))}
             </ul>
+          ) : (
+            <p className="text-muted">No posts found.</p>
           )}
         </div>
       </div>

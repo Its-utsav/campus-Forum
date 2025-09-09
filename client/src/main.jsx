@@ -40,7 +40,7 @@ const router = createBrowserRouter(
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/no-logged-in" element={<HomePageForVisiters />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
+            {/* <Route path="/admin-login" element={<AdminLogin />} /> */}
           </Route>
 
           <Route element={<AuthComponent />}>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertMessage, Button, Input } from "../../components";
 import { useAuth } from "../../context/User.context";
 import adminService from "../../services/admin.services";
@@ -57,7 +57,7 @@ export default function LoginPage() {
       if (data) {
         console.log(data);
         login({ email: data.email, role: "admin" });
-        navigate("/admin", { replace: true });
+        // return navigate("/admin", { replace: true });
       }
     } catch (error) {
       console.log(error);
@@ -67,6 +67,13 @@ export default function LoginPage() {
     }
   };
   console.log("Auth", data);
+
+  useEffect(() => {
+    if (data?.role === "admin") {
+      navigate("/admin", { replace: true });
+    }
+  }, [data, navigate]);
+
   const handleEmailChange = (e) => {
     const email = e.target.value;
     setUserData((prevData) => ({ ...prevData, email }));

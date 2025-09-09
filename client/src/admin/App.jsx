@@ -1,8 +1,9 @@
-import { Link, Navigate, Outlet, useNavigate } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import { Button } from "../components";
-import { adminRoutes } from "../routes/adminRoutes";
-import adminService from "../services/admin.services";
 import { useAuth } from "../context/User.context";
+import adminService from "../services/admin.services";
+
+import { useState } from "react";
 
 function Logout({ onClick }) {
   return (
@@ -12,15 +13,20 @@ function Logout({ onClick }) {
   );
 }
 export default function AdminApp() {
+  const [message, setMessage] = useState("");
   const { logout } = useAuth();
   const navigate = useNavigate();
   const handleClick = async () => {
-    adminService
-      .logout()
-      .then(() => logout())
-      .then(() => {
+    try {
+      const res = await adminService.logout();
+      if (res) {
+        logout();
         return navigate("/", { replace: true });
-      });
+      }
+    } catch (error) {
+      setMessage(error.message);
+      console.error(error);
+    }
   };
   return (
     <>

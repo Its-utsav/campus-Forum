@@ -7,6 +7,9 @@ export default function GuestOnly() {
   if (userData) {
     return <Navigate to="/" replace />;
   }
+  if (userData?.role === "admin") {
+    return <Navigate to="/admin" replace />;
+  }
 
   return <Outlet />;
 }
