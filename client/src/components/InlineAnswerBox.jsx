@@ -19,8 +19,9 @@ export default function InlineAnswerBox({ postId, onAnswerSubmit }) {
       });
       setMessage("");
       onAnswerSubmit();
-    } catch (err) {
-      setMessage(err.message || "Failed to post answer.");
+    } catch (error) {
+      setMessage(error.message || "Failed to post answer.");
+      alert(error.message);
     } finally {
       setLoading(false);
     }

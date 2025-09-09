@@ -121,6 +121,7 @@ export default function Register() {
       setMessage(
         error.message || "An unexpected error occurred. Please try again."
       );
+      alert(error.message);
     }
   };
 

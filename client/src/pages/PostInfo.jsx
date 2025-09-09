@@ -38,7 +38,10 @@ export default function PostInfo() {
         });
         setLoading(false);
       })
-      .catch((reason) => setMessage(reason.message))
+      .catch((error) => {
+        setMessage(error.message);
+        alert(error.message);
+      })
       .finally(() => {
         setLoading(false);
       });

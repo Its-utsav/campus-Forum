@@ -20,6 +20,7 @@ export default function HomePage() {
       } catch (error) {
         console.log(error);
         setMessage(error.message);
+        alert(error.message);
         setPosts([]);
       } finally {
         setLoading(false);
@@ -39,7 +40,7 @@ export default function HomePage() {
     }
   }, [data]);
 
-  console.log(data);
+  // console.log(data);
 
   if (!data) {
     console.log("NO data found");

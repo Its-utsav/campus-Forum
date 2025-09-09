@@ -15,7 +15,10 @@ export default function RaiseQuery() {
         // navigate to created post page
         navigate(`/posts/${data._id}`);
       })
-      .catch((reason) => setMessage(reason.message));
+      .catch((reason) => {
+        setMessage(reason.message);
+        alert(error.message);
+      });
   };
 
   return (

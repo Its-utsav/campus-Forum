@@ -22,6 +22,7 @@ export default function MyPost() {
     } catch (error) {
       console.log(error);
       setMessage(error.message);
+      alert(error.message);
     }
   };
 
@@ -34,6 +35,7 @@ export default function MyPost() {
       } catch (error) {
         console.log(error);
         setMessage(error.message);
+        alert(error.message);
         setPosts([]);
       } finally {
         setLoading(false);

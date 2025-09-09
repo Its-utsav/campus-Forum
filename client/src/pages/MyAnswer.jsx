@@ -40,6 +40,7 @@ export default function MyAnswer() {
       } catch (error) {
         console.log(error);
         setAnswers(error.message);
+        alert(error.message);
         setPosts([]);
       } finally {
         setLoading(false);

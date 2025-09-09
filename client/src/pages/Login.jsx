@@ -61,6 +61,7 @@ export default function LoginPage() {
       setMessage(
         error.message || "An unexpected error occurred. Please try again."
       );
+      alert(error.message);
     }
   };
 
