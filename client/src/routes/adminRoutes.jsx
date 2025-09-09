@@ -11,28 +11,20 @@ import { useEffect } from "react";
 
 export default function AdminProtected({ children }) {
   const { pathname } = useLocation();
-  const naviagate = useNavigate();
+  const navigate = useNavigate();
   const { data: userData } = useAuth();
 
   const isAuthenticate = !!userData;
 
   useEffect(() => {
-    if (isAuthenticate && userData?.role !== "admin") {
-      naviagate("/", { replace: true });
+    if (!isAuthenticate && pathname !== "/admin-login") {
+      navigate("/admin-login", { replace: true });
+    } else if (isAuthenticate && userData?.role !== "admin") {
+      navigate("/", { replace: true });
+    } else if (isAuthenticate && pathname === "/admin-login") {
+      navigate("/admin", { replace: true });
     }
-    if (
-      (!isAuthenticate && pathname !== "/admin-login") ||
-      pathname === "/admin"
-    ) {
-      console.log("here");
-      naviagate("/admin-login", { replace: true });
-    }
-
-    if (isAuthenticate && pathname === "/admin-login") {
-      // console.log("redirect");
-      naviagate("/admin", { replace: true });
-    }
-  }, [data, naviagate]);
+  }, [userData, pathname, navigate]);
 
   // console.log(userData, isAuthenticate);
   return <Outlet />;

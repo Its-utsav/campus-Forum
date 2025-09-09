@@ -3,7 +3,7 @@ import { Button } from "../components";
 import { useAuth } from "../context/User.context";
 import adminService from "../services/admin.services";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Logout({ onClick }) {
   return (
@@ -14,7 +14,8 @@ function Logout({ onClick }) {
 }
 export default function AdminApp() {
   const [message, setMessage] = useState("");
-  const { logout } = useAuth();
+  const { login, logout, data } = useAuth();
+
   const navigate = useNavigate();
   const handleClick = async () => {
     try {
@@ -28,6 +29,15 @@ export default function AdminApp() {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userData")) ?? false;
+    if (user) {
+      login(user);
+    } else {
+      logout();
+    }
+  }, []);
   return (
     <>
       <main className="container">
