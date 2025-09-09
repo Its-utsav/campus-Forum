@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Loading, CardComponents, Button } from "../components";
 import { useAuth } from "../context/User.context";
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import answerService from "../services/answer.services";
 
 export default function MyAnswer() {
@@ -11,14 +11,23 @@ export default function MyAnswer() {
   const [totalPost, setTotalPost] = useState(0);
 
   const { data } = useAuth();
-
+  const navigate = useNavigate();
+  const { pathname, search } = useLocation();
+  // console.log(useLocation());
   const handleClick = async (answerId) => {
     console.log(answerId);
     try {
       const res = await answerService.deleteAnswer(answerId);
+      console.log(answers);
+      if (res) {
+        setAnswers((currentAns) => {
+          return currentAns.filter((ans) => ans._id !== answerId);
+        });
+      }
     } catch (error) {
       setMessage(error.message);
       console.error(error);
+      alert(error.message);
     }
   };
 
@@ -60,7 +69,7 @@ export default function MyAnswer() {
             </span>{" "}
             {totalPost === 1 ? "post" : "posts"} found
           </p>
-
+          {message && <div className="alert alert-danger">{message}</div>}
           {answers.map((post) => (
             <div key={post._id} className="mt-2">
               <div className="card bg-light border-secondary">

@@ -14,14 +14,17 @@ export default function MyPost() {
   const handleClick = async (postId) => {
     try {
       const res = await postService.deleteAPost(postId);
-      navigate("/my-post");
+      if (res) {
+        setPosts((currentPost) => {
+          return currentPost.filter((post) => post._id !== postId);
+        });
+      }
     } catch (error) {
       console.log(error);
       setMessage(error.message);
     }
   };
 
-  const { data } = useAuth();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,7 +40,7 @@ export default function MyPost() {
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     setTotalPost(posts.length);
@@ -56,7 +59,7 @@ export default function MyPost() {
             </span>{" "}
             {totalPost === 1 ? "post" : "posts"} found
           </p>
-
+          {message && <div className="alert alert-danger">{message}</div>}
           {posts.map((post) => (
             <div key={post._id} className="mt-2">
               {/* <CardComponents key={post._id} postBody={post} /> */}
