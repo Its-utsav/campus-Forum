@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Navigate } from "react-router";
 import answerService from "../services/answer.services";
 
-export default function InlineAnswerBox({ postId }) {
+export default function InlineAnswerBox({ postId, onAnswerSubmit }) {
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,13 +11,14 @@ export default function InlineAnswerBox({ postId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage("");
     try {
       const res = await answerService.postAnswer({
         postId: postId,
         answerBody: { body: content },
       });
-      setMessage("Answer posted !");
-      setRedirect(true);
+      setMessage("");
+      onAnswerSubmit();
     } catch (err) {
       setMessage(err.message || "Failed to post answer.");
     } finally {
@@ -25,9 +26,9 @@ export default function InlineAnswerBox({ postId }) {
     }
   };
 
-  if (redirect) {
-    return <Navigate to={`/posts/${postId}?refetch=true`} />;
-  }
+  // if (redirect) {
+  //   return <Navigate to={`/posts/${postId}?refetch=true`} />;
+  // }
 
   return (
     <div className="mt-4">
@@ -45,7 +46,7 @@ export default function InlineAnswerBox({ postId }) {
           <button
             type="submit"
             className="btn btn-primary btn-sm"
-            disabled={loading}
+            disabled={loading || content.length < 10}
           >
             {loading ? "Posting..." : "Post Answer"}
           </button>
