@@ -17,7 +17,7 @@ export default function RaiseQuery() {
       })
       .catch((reason) => {
         setMessage(reason.message);
-        alert(error.message);
+        // alert(error.message);
       });
   };
 

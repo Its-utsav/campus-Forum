@@ -4,7 +4,7 @@ import adminService from "../../services/admin.services";
 import { useAuth } from "../../context/User.context";
 
 export default function Dashboard() {
-  console.log(useAuth());
+  // console.log(useAuth());
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
 

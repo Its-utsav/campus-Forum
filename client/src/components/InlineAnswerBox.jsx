@@ -21,7 +21,7 @@ export default function InlineAnswerBox({ postId, onAnswerSubmit }) {
       onAnswerSubmit();
     } catch (error) {
       setMessage(error.message || "Failed to post answer.");
-      alert(error.message);
+      // alert(error.message);
     } finally {
       setLoading(false);
     }

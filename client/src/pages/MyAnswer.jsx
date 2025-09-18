@@ -27,7 +27,7 @@ export default function MyAnswer() {
     } catch (error) {
       setMessage(error.message);
       console.error(error);
-      alert(error.message);
+      // alert(error.message);
     }
   };
 
@@ -40,7 +40,7 @@ export default function MyAnswer() {
       } catch (error) {
         console.log(error);
         setAnswers(error.message);
-        alert(error.message);
+        // alert(error.message);
         setPosts([]);
       } finally {
         setLoading(false);

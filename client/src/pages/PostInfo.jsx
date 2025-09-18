@@ -40,7 +40,7 @@ export default function PostInfo() {
       })
       .catch((error) => {
         setMessage(error.message);
-        alert(error.message);
+        // alert(error.message);
       })
       .finally(() => {
         setLoading(false);
