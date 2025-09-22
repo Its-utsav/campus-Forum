@@ -7,9 +7,10 @@ import { isValidEmail, validLength } from "../utils/validation.js";
 import { generateAccessTokenForAdmin } from "../utils/common.js";
 import Post from "../models/post.model.js";
 import Answer from "../models/answer.model.js";
+import { ADMIN } from "../utils/constants.js";
 
-const ADMIN_EMAIL = "admin@cf.edu";
-const ADMIN_PASSWORD = "1234";
+const ADMIN_EMAIL = ADMIN.ADMIN_EMAIL;
+const ADMIN_PASSWORD = ADMIN.ADMIN_PASSWORD;
 
 const handleLogin = asyncHandler(async (req, res) => {
 	if (!req.body) {
@@ -150,7 +151,6 @@ const deletePost = asyncHandler(async (req, res) => {
 	if (!deletedPost) {
 		throw new ApiError(404, "Post not found");
 	}
-
 
 	await Answer.deleteMany({ post: postId });
 

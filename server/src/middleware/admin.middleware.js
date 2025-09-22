@@ -1,9 +1,10 @@
 import ApiError from "../utils/ApiError.js";
-import asyncHandler from "../utils/AsyncHandler.js";
 import jwt from "jsonwebtoken";
 
-const ADMIN_EMAIL = "admin@cf.edu";
-const ADMIN_PASSWORD = "1234";
+import { ADMIN } from "../utils/constants.js";
+
+const ADMIN_EMAIL = ADMIN.ADMIN_EMAIL;
+const ADMIN_PASSWORD = ADMIN.ADMIN_PASSWORD;
 
 const adminMiddleware = (req, res, next) => {
 	console.log("at middleware", req.originalUrl, req.method);
