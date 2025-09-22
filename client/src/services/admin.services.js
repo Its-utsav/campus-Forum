@@ -136,6 +136,66 @@ class AdminService {
       throw error;
     }
   }
+
+  async deleteUser(userId) {
+    try {
+      const res = await fetch(`${this.BASE_URL}/admin/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Error while delete User");
+      }
+      return data.data;
+    } catch (error) {
+      console.error("error :: deleteUser", error);
+      throw error;
+    }
+  }
+
+  async deletePost(postId) {
+    try {
+      const res = await fetch(`${this.BASE_URL}/admin/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Error while delete post");
+      }
+      return data.data;
+    } catch (error) {
+      console.error("error :: deletePost", error);
+      throw error;
+    }
+  }
+
+  async deletePost(answersId) {
+    try {
+      const res = await fetch(`${this.BASE_URL}/admin/answers/${answersId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Error while delete post");
+      }
+      return data.data;
+    } catch (error) {
+      console.error("error :: deletePost", error);
+      throw error;
+    }
+  }
 }
 
 const adminService = new AdminService();
