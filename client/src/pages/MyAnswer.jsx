@@ -76,15 +76,19 @@ export default function MyAnswer() {
               <div className="card bg-light border-secondary">
                 <div className="card-body">
                   <p className="card-text">{post.body}</p>
-                  <Link to={`/posts/${post.post._id}`}>
-                    <Button className="btn btn-primary">Check answers</Button>
-                  </Link>
-                  <Button
-                    className="btn btn-danger"
-                    onClick={() => handleClick(post._id)}
-                  >
-                    Delete
-                  </Button>
+                  <div className="p-2 d-flex gap-2">
+                    <Link to={`/posts/${post.post._id}`}>
+                      <Button className="btn btn-primary">
+                        Check Question / answers
+                      </Button>
+                    </Link>
+                    <Button
+                      className="btn btn-danger"
+                      onClick={() => handleClick(post._id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </div>
               </div>
               {/* <CardComponents key={post._id} postBody={post} /> */}

@@ -93,35 +93,58 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>Admin Login</h1>
-      <form onSubmit={handleSubmit}>
-        <Input
-          label="email"
-          type="email"
-          required
-          autoComplete="email"
-          value={userData.email}
-          onChange={handleEmailChange}
-        />
-        {errors.email && <AlertMessage text={errors.email} />}
+    <div className="min-vh-100 bg-light d-flex align-items-center justify-content-center">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div className="card shadow-lg border-0 rounded-4">
+              <div className="card-header bg-primary text-white text-center py-3">
+                <h3 className="mb-0">Admin Login</h3>
+              </div>
 
-        <Input
-          label="password"
-          type="password"
-          required
-          autoComplete="current-password"
-          value={userData.password}
-          onChange={handlePasswordChange}
-        />
+              <div className="card-body p-4">
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <Input
+                      label="email"
+                      type="email"
+                      required
+                      autoComplete="email"
+                      value={userData.email}
+                      onChange={handleEmailChange}
+                    />
+                    {errors.email && <AlertMessage text={errors.email} />}
+                  </div>
 
-        {errors.password && <AlertMessage text={errors.password} />}
-        <Button className="btn-primary" type="submit">
-          Login !!
-        </Button>
+                  <div className="mb-3">
+                    <Input
+                      label="password"
+                      type="password"
+                      required
+                      autoComplete="current-password"
+                      value={userData.password}
+                      onChange={handlePasswordChange}
+                    />
+                    {errors.password && <AlertMessage text={errors.password} />}
+                  </div>
 
-        {message && <AlertMessage text={message} />}
-      </form>
+                  <Button className="btn-primary w-100 mb-3" type="submit">
+                    Login !!
+                  </Button>
+
+                  {message && <AlertMessage text={message} />}
+                </form>
+              </div>
+
+              <div className="card-footer text-center py-2">
+                <small className="text-muted">
+                  For authorized personnel only
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

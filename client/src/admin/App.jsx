@@ -41,7 +41,7 @@ export default function AdminApp() {
   return (
     <>
       <main className="container">
-        <h1>Admin Layout</h1>
+        <h1>Admin Dashboard</h1>
         <div className="d-flex gap-2">
           <Link to={"/admin"} className="btn btn-sm btn-outline-primary">
             Dashboard

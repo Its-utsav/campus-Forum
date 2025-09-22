@@ -4,7 +4,7 @@ export default function AlertMessage({
   text = "An Unknown error occurred",
   autoHide = true,
 }) {
-  console.log(text);
+  // console.log(text);
   const [visible, setVisible] = useState(true);
   const showComponent = () => {
     setVisible(true);
@@ -26,7 +26,7 @@ export default function AlertMessage({
   return (
     <>
       {visible && (
-        <div className="alert alert-danger">
+        <div className="alert alert-danger mt-2">
           <span>{text}</span>
         </div>
       )}

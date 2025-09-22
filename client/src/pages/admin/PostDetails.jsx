@@ -20,7 +20,7 @@ export default function PostDetails() {
           <h5 className="mb-0">Question</h5>
         </div>
         <div className="card-body bg-white">
-          <p className="fs-5">{post.question}</p>
+          <p className="fs-5">{post.body}</p>
           <p className="text-muted mb-1">
             <strong>Author:</strong> {post.authorInfo.username}
           </p>

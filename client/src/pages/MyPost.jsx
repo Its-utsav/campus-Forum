@@ -68,16 +68,18 @@ export default function MyPost() {
               <div className="card bg-light border-secondary">
                 <div className="card-body">
                   <p className="card-text">{post.body}</p>
-                  <Link to={`/posts/${post._id}`}>
-                    <Button className="btn btn-primary">Check answers</Button>
-                  </Link>
+                  <div className="p-2  d-flex gap-2">
+                    <Link to={`/posts/${post._id}`}>
+                      <Button className="btn btn-primary">Check answers</Button>
+                    </Link>
 
-                  <Button
-                    className="btn btn-danger"
-                    onClick={() => handleClick(post._id)}
-                  >
-                    Delete
-                  </Button>
+                    <Button
+                      className="btn btn-danger"
+                      onClick={() => handleClick(post._id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

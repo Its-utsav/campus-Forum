@@ -1,7 +1,6 @@
 import { Link } from "react-router";
 
 export default function HomePage() {
-  console.log("Hi");
   return (
     <div className="container-fluid bg-light min-vh-100 d-flex flex-column">
       <header className="bg-primary text-white py-5">
@@ -67,12 +66,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
-      <footer className="bg-primary text-white mt-auto py-3">
-        <div className="container text-center small">
-          &copy; 2025 Campus Forum. Built for students, by students.
-        </div>
-      </footer>
     </div>
   );
 }

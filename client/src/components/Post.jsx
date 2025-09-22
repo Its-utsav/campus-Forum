@@ -32,40 +32,40 @@ export default function Post() {
   );
 }
 
-function LoginForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+// function LoginForm() {
+//   const [username, setUsername] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (username === "utsav" && password === "utsav@123") {
-      setMessage("Loggin successfully");
-    } else {
-      setMessage("Invalid credentials");
-    }
-  };
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     if (username === "utsav" && password === "utsav@123") {
+//       setMessage("Loggin successfully");
+//     } else {
+//       setMessage("Invalid credentials");
+//     }
+//   };
 
-  return (
-    <form action="" onSubmit={handleSubmit}>
-      <div>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <div>
-        <input type="submit" />
-      </div>
-      <div>{message && <p>{message}</p>}</div>
-    </form>
-  );
-}
+//   return (
+//     <form action="" onSubmit={handleSubmit}>
+//       <div>
+//         <input
+//           type="text"
+//           value={username}
+//           onChange={(e) => setUsername(e.target.value)}
+//         />
+//       </div>
+//       <div>
+//         <input
+//           type="password"
+//           value={password}
+//           onChange={(e) => setPassword(e.target.value)}
+//         />
+//       </div>
+//       <div>
+//         <input type="submit" />
+//       </div>
+//       <div>{message && <p>{message}</p>}</div>
+//     </form>
+//   );
+// }

@@ -9,7 +9,7 @@ import { data, Outlet, Route, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../context/User.context";
 import { useEffect } from "react";
 
-export default function AdminProtected({ children }) {
+export default function AdminProtected() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { data: userData } = useAuth();
@@ -17,8 +17,8 @@ export default function AdminProtected({ children }) {
   const isAuthenticate = !!userData;
 
   useEffect(() => {
-    if (!isAuthenticate && pathname !== "/admin-login") {
-      navigate("/admin-login", { replace: true });
+    if (!isAuthenticate) {
+      navigate("/", { replace: true });
     } else if (isAuthenticate && userData?.role !== "admin") {
       navigate("/", { replace: true });
     } else if (isAuthenticate && pathname === "/admin-login") {
