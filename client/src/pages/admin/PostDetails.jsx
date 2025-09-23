@@ -1,20 +1,43 @@
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import adminService from "../../services/admin.services";
-import { Loading } from "../../components";
+import { Button, Loading, AlertMessage } from "../../components";
 
 export default function PostDetails() {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     adminService.getPostById(postId).then(setPost);
   }, [postId]);
 
+  // console.log(post);
+  const handleAnswerDelete = async (answerId) => {
+    try {
+      setLoading(true);
+      const res = await adminService.deleteAnswer(answerId);
+      if (res) {
+        setPost((currentPost) => ({
+          ...currentPost,
+          answers: currentPost.answers.filter(
+            (answer) => answer._id !== answerId
+          ),
+        }));
+      }
+    } catch (error) {
+      setMessage(error.message);
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return post ? (
     <div className="container mt-4">
       <h3>Post Details</h3>
-
+      {message && <AlertMessage text={message} autoHide={true} />}
       <div className="card shadow-sm border-primary">
         <div className="card-header bg-primary text-white">
           <h5 className="mb-0">Question</h5>
@@ -39,6 +62,14 @@ export default function PostDetails() {
                 <small className="text-muted">
                   — {data.autherInfo?.username}
                 </small>
+                <div>
+                  <Button
+                    className="btn-danger"
+                    onClick={() => handleAnswerDelete(data._id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </div>
             </div>
           ))

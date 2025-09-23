@@ -5,7 +5,7 @@
  *  divClassName?:string
  *  inputClassName?:string
  * }
- * & import("react").InputHTMLAttributes<HtmlHTMLAttributes>} props
+ * & import("react").InputHTMLAttributes<HTMLInputElement>} props
  */
 export default function Input(props) {
   const {
