@@ -177,7 +177,7 @@ class AdminService {
     }
   }
 
-  async deletePost(answersId) {
+  async deleteAnswer(answersId) {
     try {
       const res = await fetch(`${this.BASE_URL}/admin/answers/${answersId}`, {
         method: "DELETE",
