@@ -5,7 +5,6 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
-  Routes,
 } from "react-router";
 import App from "./App.jsx";
 import "./index.css";
@@ -24,7 +23,6 @@ import {
   MyAnswer,
 } from "./pages/index.js";
 
-import { LoginPage as AdminLogin } from "./pages/admin/";
 import { adminRoutes } from "./routes/adminRoutes.jsx";
 
 const router = createBrowserRouter(
