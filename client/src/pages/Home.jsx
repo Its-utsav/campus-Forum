@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import postService from "../services/post.services";
-import { Loading, CardComponents } from "../components";
+import { Loading, CardComponents, AlertMessage } from "../components";
 import { useAuth } from "../context/User.context";
 import { Navigate, useNavigate } from "react-router";
 
@@ -11,6 +11,7 @@ export default function HomePage() {
   const [totalPost, setTotalPost] = useState(0);
 
   const { data } = useAuth();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,7 +27,10 @@ export default function HomePage() {
         setLoading(false);
       }
     };
-    fetchData();
+
+    if (!data?.role) {
+      fetchData();
+    }
   }, []);
 
   useEffect(() => {
@@ -35,7 +39,6 @@ export default function HomePage() {
   const navigate = useNavigate();
   useEffect(() => {
     if (data?.role === "admin") {
-      console.log("should move to admin");
       navigate("/admin");
     }
   }, [data]);
@@ -43,9 +46,9 @@ export default function HomePage() {
   // console.log(data);
 
   if (!data) {
-    console.log("NO data found");
     return <Navigate to={"/no-logged-in"} replace />;
   }
+
   return (
     <>
       {loading ? (
@@ -65,6 +68,7 @@ export default function HomePage() {
               <CardComponents key={post._id} postBody={post} />
             </div>
           ))}
+          {message && <AlertMessage autoHide={false} text={message} />}
         </>
       )}
     </>
