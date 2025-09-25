@@ -1,10 +1,10 @@
 import mongoose, { isValidObjectId } from "mongoose";
+import Answer from "../models/answer.model.js";
 import Post from "../models/post.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/AsyncHandler.js";
 import { checkEmpty, validLength } from "../utils/validation.js";
-import Answer from "../models/answer.model.js";
 
 /**
  * @typedef {import("express").Request} Req
@@ -53,7 +53,6 @@ const getAllPost = asyncHandler(async (_, res) => {
 					{
 						$project: {
 							username: 1,
-							_id: 0,
 						},
 					},
 				],
@@ -102,6 +101,8 @@ const getPost = asyncHandler(async (req, res) => {
 							authorId: 1,
 							postId: 1,
 							content: 1,
+							isDeleted: 1,
+							deletedBy: 1,
 						},
 					},
 					{
@@ -155,7 +156,6 @@ const getPost = asyncHandler(async (req, res) => {
 					{
 						$project: {
 							username: 1,
-							_id: 0,
 						},
 					},
 				],

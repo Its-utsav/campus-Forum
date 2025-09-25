@@ -1,30 +1,18 @@
-import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { Button, InlineAnswerBox, Loading } from "../../components";
+import { useAuth } from "../../context/User.context";
+import answerService from "../../services/answer.services";
 import postService from "../../services/post.services";
-import { InlineAnswerBox, Loading } from "../../components";
 
 export default function PostInfo() {
   const { postId } = useParams();
-
+  const { data: userData } = useAuth();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
-  // const [post, setPost] = useState({
-  //   answers: [
-  //     {
-  //       autherInfo: { _id: "6873c36d7ca6107e8fe90391", username: "utsav" },
-  //       authorId: "6873c36d7ca6107e8fe90391",
-  //       content: "on ground floor 🤗",
-  //       postId: "6873c3a17ca6107e8fe9039f",
-  //       _id: "6873c48c6277ae70771b01ee",
-  //     },
-  //   ],
-  //   authorInfo: {},
-  //   totalAnswer: -1,
-  //   question: "",
-  //   rest: {},
-  // });
-  const [post, setPost] = useState(null);
 
+  const [post, setPost] = useState(null);
+  const navigate = useNavigate();
   const fetchPost = useCallback(async () => {
     postService
       .getAPost(postId)
@@ -51,6 +39,35 @@ export default function PostInfo() {
     fetchPost();
   }, [fetchPost]);
 
+  const handlePostDelete = async () => {
+    try {
+      setLoading(true);
+      const res = await postService.deleteAPost(postId);
+      if (res) {
+        setMessage("Post deleted successfully.");
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
+    } catch (error) {
+      setMessage(error.message);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAnswerDelete = async (answerId) => {
+    try {
+      setLoading(true);
+      await answerService.deleteAnswer(answerId);
+      fetchPost();
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   if (loading) {
     return <Loading />;
   }
@@ -64,14 +81,26 @@ export default function PostInfo() {
       </div>
     );
   }
+  const canDeletePost =
+    userData &&
+    (userData._id === post?.autherInfo?._id || userData.role === "MODERATOR");
 
   return (
     <div className="container my-4">
       {message && <div className="alert alert-danger">{message}</div>}
 
       <div className="card shadow-sm border-primary">
-        <div className="card-header bg-primary text-white">
+        <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
           <h5 className="mb-0">Question</h5>
+          {canDeletePost && (
+            <Button
+              className="btn-sm btn-danger"
+              onClick={handlePostDelete}
+              disabled={loading}
+            >
+              Delete Post
+            </Button>
+          )}
         </div>
         <div className="card-body bg-white">
           <p className="fs-5">{post.question}</p>
@@ -87,16 +116,32 @@ export default function PostInfo() {
       <div className="mt-4">
         <h5 className="text-primary">Answers</h5>
         {post.answers.length > 0 ? (
-          post.answers.map((data, index) => (
-            <div key={index} className="card mb-3 border-light shadow-sm">
-              <div className="card-body">
-                <p className="mb-1">{data.content}</p>
-                <small className="text-muted">
-                  — {data.autherInfo?.username}
-                </small>
+          post.answers.map((data, index) => {
+            const canDeleteAnswer =
+              userData &&
+              (userData._id === data.authorId || userData.role === "MODERATOR");
+            const isDeletedByMod = data.isDeleted;
+
+            return (
+              <div key={index} className="card mb-3 border-light shadow-sm">
+                <div className="card-body">
+                  <p className="mb-1">{data.content}</p>
+                  <small className="text-muted">
+                    — {data.autherInfo?.username}
+                  </small>
+                  {canDeleteAnswer && !isDeletedByMod && (
+                    <Button
+                      className="btn-sm btn-outline-danger"
+                      onClick={() => handleAnswerDelete(data._id)}
+                      disabled={loading}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p className="text-muted">No answers yet.</p>
         )}

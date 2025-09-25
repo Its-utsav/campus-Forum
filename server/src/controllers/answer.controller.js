@@ -74,8 +74,10 @@ const deleteAnswer = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "invalid answerId");
 	}
 
+	const answer = await Answer.findById(answerId);
 	// check for author
-	const isAuthor = requestingUser._id.toString() === post.authorId.toString();
+	const isAuthor =
+		requestingUser._id.toString() === answer.authorId.toString();
 	// check for mod
 	const isModerator = ["ADMIN", "MODERATOR"].includes(requestingUser.role);
 
@@ -86,11 +88,10 @@ const deleteAnswer = asyncHandler(async (req, res) => {
 			"You do not have permission to delete this answer",
 		);
 	}
-	const answer = await Answer.findById(answerId);
 
 	// mod try to delete
 	if (isModerator && !isAuthor) {
-		answer.content = `[This is was deleted by ${requestingUser.username}]`;
+		answer.content = `[This answer were deleted by, moderator:- ${requestingUser.username}]`;
 		answer.isDeleted = true;
 		answer.deletedBy = requestingUser._id;
 		await answer.save();
