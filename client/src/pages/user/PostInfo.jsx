@@ -18,6 +18,7 @@ export default function PostInfo() {
       .getAPost(postId)
       .then((data) => {
         setPost({
+          _id: data._id,
           answers: data.answers,
           authorInfo: data.authorInfo,
           totalAnswer: data.totalAnswer,
@@ -83,7 +84,7 @@ export default function PostInfo() {
   }
   const canDeletePost =
     userData &&
-    (userData._id === post?.autherInfo?._id || userData.role === "MODERATOR");
+    (userData._id === post?.authorInfo?._id || userData.role === "MODERATOR");
 
   return (
     <div className="container my-4">
