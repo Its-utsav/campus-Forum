@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import { isValidObjectId } from "mongoose";
-import { isValidEmail, validLength } from "../utils/validation.js";
+import { isValidDate, isValidEmail, validLength } from "../utils/validation.js";
 import { generateAccessTokenForAdmin } from "../utils/common.js";
 import Post from "../models/post.model.js";
 import Answer from "../models/answer.model.js";
@@ -182,6 +182,140 @@ const deleteAnswer = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, {}, "Answer deleted successfully"));
 });
 
+const getAnalytics = asyncHandler(async (req, res) => {
+	const { startDate, endDate } = req.query;
+
+	if (!startDate || !endDate) {
+		throw new ApiError(400, "Both start and end date is required");
+	}
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+
+	if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+		throw new ApiError(400, "Invalid date format provided");
+	}
+
+	end.setHours(23, 59, 59, 999); // till mid night
+
+	const [newUsers, newPost, newAnswer, topPost] = await Promise.all([
+		// count new user , post and answer between these two date
+		// User.countDocuments({
+		// 	createdAt: {
+		// 		$gte: start,
+		// 		$lte: end,
+		// 	},
+		// }),
+
+		User.aggregate([
+			{
+				$match: {
+					createdAt: {
+						$gte: start,
+						$lte: end,
+					},
+				},
+			},
+			{
+				$facet: {
+					users: [{ $project: { username: 1, email: 1 } }],
+					totalCount: [{ $count: "totalUsers" }],
+				},
+			},
+			{
+				$addFields: {
+					totalUsers: {
+						$arrayElemAt: ["$totalCount.totalUsers", 0],
+					},
+				},
+			},
+			{
+				$project: {
+					users: 1,
+					totalUsers: 1,
+				},
+			},
+		]),
+
+		Post.countDocuments({
+			createdAt: {
+				$gte: start,
+				$lte: end,
+			},
+		}),
+
+		Answer.countDocuments({
+			createdAt: {
+				$gte: start,
+				$lte: end,
+			},
+		}),
+		// top 5 post
+		Answer.aggregate([
+			{
+				$match: {
+					createdAt: {
+						$gte: start,
+						$lte: end,
+					},
+				},
+			},
+			{
+				$group: {
+					_id: "$postId", // NOOB
+					answerCount: { $sum: 1 },
+				},
+			},
+			{
+				$sort: { answerCount: -1 },
+			},
+			{
+				$limit: 5,
+			},
+			{
+				$lookup: {
+					from: "posts",
+					localField: "_id",
+					foreignField: "_id",
+					as: "postDetails",
+				},
+			},
+			{
+				$unwind: "$postDetails",
+			},
+			{
+				$project: {
+					_id: 1,
+					answerCount: 1,
+					body: "$postDetails.body",
+				},
+			},
+		]),
+	]);
+
+	const analyticsData = {
+		dateRange: {
+			start: start.toISOString().split("T")[0],
+			end: end.toISOString().split("T")[0],
+		},
+		users: {
+			newUsers,
+		},
+		posts: {
+			newPost,
+		},
+		answer: {
+			newAnswer,
+		},
+		topPostData: {
+			topPost,
+		},
+	};
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, analyticsData, "Data Fetch successfully"));
+});
+
 // const getAllPost = asyncHandler((req, res) => {
 // 	return res.status(200).json({
 // 		message: "Hi",
@@ -204,4 +338,5 @@ export {
 	deleteUser,
 	deletePost,
 	deleteAnswer,
+	getAnalytics,
 };

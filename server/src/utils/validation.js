@@ -21,4 +21,9 @@ const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
  */
 const isValidEmail = (email) => email && emailPattern.test(email);
 
-export { checkEmpty, validLength, isValidEmail };
+const isValidDate = (dateString) => {
+	const date = new Date(dateString);
+	return !isNaN(date.getTime());
+};
+
+export { checkEmpty, validLength, isValidEmail, isValidDate };

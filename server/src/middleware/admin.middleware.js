@@ -7,7 +7,7 @@ const ADMIN_EMAIL = ADMIN.ADMIN_EMAIL;
 const ADMIN_PASSWORD = ADMIN.ADMIN_PASSWORD;
 
 const adminMiddleware = (req, res, next) => {
-	console.log("at middleware", req.originalUrl, req.method);
+	// console.log("at middleware", req.originalUrl, req.method);
 	try {
 		const incommingAccessToken =
 			req.cookies?.accessToken ||

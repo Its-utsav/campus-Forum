@@ -7,6 +7,7 @@ import {
 	deleteUser,
 	deletePost,
 	deleteAnswer,
+	getAnalytics,
 } from "../controllers/admin.controller.js";
 import { getAllPost, getPost } from "../controllers/post.controller.js";
 import adminMiddleware from "../middleware/admin.middleware.js";
@@ -26,5 +27,7 @@ router.get("/posts", getAllPost);
 router.route("/posts/:postId").get(getPost).delete(deletePost);
 
 router.route("/answers/:answerId").delete(deleteAnswer);
+
+router.route("/analytics").get(getAnalytics);
 
 export default router;
