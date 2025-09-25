@@ -15,7 +15,9 @@ function App() {
       authService
         .getUserInfo()
         .then((res) => {
-          res ? login({ _id: res._id, username: res.username }) : logout();
+          res
+            ? login({ _id: res._id, username: res.username, role: res.role })
+            : logout();
         })
         .catch((reason) => {
           console.log(reason);

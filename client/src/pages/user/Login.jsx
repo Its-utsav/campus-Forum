@@ -53,7 +53,9 @@ export default function LoginPage() {
     try {
       await authService
         .login(userData)
-        .then((data) => login({ _id: data._id, username: data.username }))
+        .then((data) =>
+          login({ _id: data._id, username: data.username, role: data.role })
+        )
         .then(() => navigate("/"))
         .catch((reason) => setMessage(reason.message));
     } catch (error) {
