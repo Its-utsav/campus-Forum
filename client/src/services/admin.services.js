@@ -196,6 +196,25 @@ class AdminService {
       throw error;
     }
   }
+  async updateUserRole(userId, roleData) {
+    try {
+      const res = await fetch(`${this.BASE_URL}/admin/users/${userId}/role`, {
+        body: JSON.stringify(roleData),
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Error while update user role");
+      }
+      return data.data;
+    } catch (error) {
+      console.error("error :: updateUserRole", error);
+      throw error;
+    }
+  }
 }
 
 const adminService = new AdminService();
