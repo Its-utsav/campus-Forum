@@ -318,10 +318,14 @@ const getAnalytics = asyncHandler(async (req, res) => {
 
 const updateUserRole = asyncHandler(async (req, res) => {
 	const { userId } = req.params;
+	// console.log(req.body);
+	if (Object.keys(req.body).length === 0 && req.body.constructor === Object) {
+		throw new ApiError(400, "Role is missing");
+	}
+
 	let { role } = req.body;
 	role = role.toUpperCase();
 	// can be user or moderator
-
 	if (!role || !["USER", "MODERATOR"].includes(role)) {
 		throw new ApiError(400, "Invalid role");
 	}

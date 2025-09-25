@@ -173,7 +173,8 @@ const getPost = asyncHandler(async (req, res) => {
 /** @param {Req} req @param {Res} res @param {Next} next */
 const deletePost = asyncHandler(async (req, res) => {
 	const postId = req.params.postId;
-	const userId = req.user?._id;
+	// const userId = req.user?._id;
+	const requestingUser = req.user;
 
 	if (!postId) {
 		throw new ApiError(400, "postid is required");
@@ -187,8 +188,21 @@ const deletePost = asyncHandler(async (req, res) => {
 		throw new ApiError(404, "Post not found");
 	}
 
-	if (post.authorId.toString() !== userId.toString()) {
-		throw new ApiError(401, "unauthorized this post not belongs to you");
+	// if (post.authorId.toString() !== userId.toString()) {
+	// 	throw new ApiError(401, "unauthorized this post not belongs to you");
+	// }
+
+	// check for author
+	const isAuthor = requestingUser._id.toString() === post.authorId.toString();
+	// check for mod
+	const isModerator = ["ADMIN", "MODERATOR"].includes(requestingUser.role);
+
+	// no mod and no author means , someone else try to delete -> stop it
+	if (!isAuthor && !isModerator) {
+		throw new ApiError(
+			403,
+			"You do not have permission to delete this post",
+		);
 	}
 
 	await Post.findByIdAndDelete(postId);

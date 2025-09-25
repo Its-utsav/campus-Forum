@@ -65,6 +65,7 @@ const getAnswer = asyncHandler(async (req, res) => {
 
 const deleteAnswer = asyncHandler(async (req, res) => {
 	const answerId = req.params.answerId;
+	const requestingUser = req.user;
 	if (!answerId) {
 		throw new ApiError(400, "answerId is required");
 	}
@@ -73,7 +74,32 @@ const deleteAnswer = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "invalid answerId");
 	}
 
-	const answer = await Answer.findByIdAndDelete(answerId);
+	// check for author
+	const isAuthor = requestingUser._id.toString() === post.authorId.toString();
+	// check for mod
+	const isModerator = ["ADMIN", "MODERATOR"].includes(requestingUser.role);
+
+	// no mod and no author means , someone else try to delete -> stop it
+	if (!isAuthor && !isModerator) {
+		throw new ApiError(
+			403,
+			"You do not have permission to delete this answer",
+		);
+	}
+	const answer = await Answer.findById(answerId);
+
+	// mod try to delete
+	if (isModerator && !isAuthor) {
+		answer.content = `[This is was deleted by ${requestingUser.username}]`;
+		answer.isDeleted = true;
+		answer.deletedBy = requestingUser._id;
+		await answer.save();
+		return res
+			.status(200)
+			.json(new ApiResponse(200, answer, "answer deleted by moderator"));
+	}
+
+	await Answer.findByIdAndDelete(answerId);
 	if (!answer) {
 		throw new ApiError(400, "no answer found");
 	}
