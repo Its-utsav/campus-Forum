@@ -316,6 +316,36 @@ const getAnalytics = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, analyticsData, "Data Fetch successfully"));
 });
 
+const updateUserRole = asyncHandler(async (req, res) => {
+	const { userId } = req.params;
+	let { role } = req.body;
+	role = role.toUpperCase();
+	// can be user or moderator
+
+	if (!role || !["USER", "MODERATOR"].includes(role)) {
+		throw new ApiError(400, "Invalid role");
+	}
+
+	if (!isValidObjectId(userId)) {
+		throw new ApiError(400, "Invalid user id");
+	}
+
+	const updatedUser = await User.findByIdAndUpdate(
+		userId,
+		{
+			role: role,
+		},
+		{
+			new: true,
+			runValidators: true,
+		},
+	).select("-password -refreshToken");
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, updatedUser, "User role updated"));
+});
+
 // const getAllPost = asyncHandler((req, res) => {
 // 	return res.status(200).json({
 // 		message: "Hi",
@@ -339,4 +369,5 @@ export {
 	deletePost,
 	deleteAnswer,
 	getAnalytics,
+	updateUserRole,
 };

@@ -30,6 +30,11 @@ const schema = new Schema(
 			required: true,
 			min: [8, "Password must be eight character long"],
 		},
+		role: {
+			type: String,
+			enum: ["USER", "ADMIN", "MODERATOR"],
+			default: "user",
+		},
 		refreshToken: String,
 	},
 	{

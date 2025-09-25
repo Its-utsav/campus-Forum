@@ -18,6 +18,15 @@ const schema = new Schema(
 			required: true,
 			trim: true,
 		},
+		// mods
+		isDeleted: {
+			type: Boolean,
+			default: false,
+		},
+		deletedBy: {
+			type: Schema.Types.ObjectId,
+			ref: "users",
+		},
 	},
 	{
 		timestamps: true,
