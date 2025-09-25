@@ -60,7 +60,7 @@ export default function Header() {
 
   return (
     <header>
-      <nav className="navbar bg-body-tertiary">
+      <nav className="navbar bg-body-tertiary shadow rounded m-2">
         <div className="container-fluid">
           <Link to="/" className="navbar-brand">
             Campus Forum
