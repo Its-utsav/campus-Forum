@@ -33,7 +33,7 @@ const schema = new Schema(
 		role: {
 			type: String,
 			enum: ["USER", "ADMIN", "MODERATOR"],
-			default: "user",
+			default: "USER",
 		},
 		refreshToken: String,
 	},
