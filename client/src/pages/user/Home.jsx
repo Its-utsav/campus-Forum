@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import postService from "../../services/post.services";
-import { Loading, CardComponents, AlertMessage } from "../../components";
-import { useAuth } from "../../context/User.context";
 import { Navigate, useNavigate } from "react-router";
+import { AlertMessage, CardComponents, Loading } from "../../components";
+import { useAuth } from "../../context/User.context";
+import postService from "../../services/post.services";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -28,7 +28,7 @@ export default function HomePage() {
       }
     };
 
-    if (!data?.role) {
+    if (data?.role && (data?.role === "MODERATOR" || data?.role === "USER")) {
       fetchData();
     }
   }, []);
