@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AlertMessage, AuthNavigation, Button, Input } from "../components";
-import authService from "../services/auth.services";
+import { AlertMessage, AuthNavigation, Button, Input } from "../../components";
+import authService from "../../services/auth.services";
 import { useNavigate } from "react-router";
 
 export default function Register() {

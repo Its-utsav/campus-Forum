@@ -1,28 +1,33 @@
 import { useEffect, useState } from "react";
-import postService from "../services/post.services";
-import { Loading, Button } from "../components";
-import { useAuth } from "../context/User.context";
-import { Link, useNavigate } from "react-router";
+import { Loading, CardComponents, Button } from "../../components";
+import { useAuth } from "../../context/User.context";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
+import answerService from "../../services/answer.services";
 
-export default function MyPost() {
-  const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
+export default function MyAnswer() {
+  const [answers, setAnswers] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [totalPost, setTotalPost] = useState(0);
 
-  const handleClick = async (postId) => {
+  const { data } = useAuth();
+  const navigate = useNavigate();
+  const { pathname, search } = useLocation();
+  // console.log(useLocation());
+  const handleClick = async (answerId) => {
+    console.log(answerId);
     try {
-      const res = await postService.deleteAPost(postId);
+      const res = await answerService.deleteAnswer(answerId);
+      console.log(answers);
       if (res) {
-        setPosts((currentPost) => {
-          return currentPost.filter((post) => post._id !== postId);
+        setAnswers((currentAns) => {
+          return currentAns.filter((ans) => ans._id !== answerId);
         });
       }
     } catch (error) {
-      console.log(error);
       setMessage(error.message);
-      alert(error.message);
+      console.error(error);
+      // alert(error.message);
     }
   };
 
@@ -30,11 +35,11 @@ export default function MyPost() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await postService.getMyPost();
-        setPosts(res);
+        const res = await answerService.getMyAnswers();
+        setAnswers(res);
       } catch (error) {
         console.log(error);
-        setMessage(error.message);
+        setAnswers(error.message);
         // alert(error.message);
         setPosts([]);
       } finally {
@@ -42,12 +47,16 @@ export default function MyPost() {
       }
     };
     fetchData();
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
-    setTotalPost(posts.length);
-  }, [posts]);
+    setTotalPost(answers.length);
+  }, [answers]);
 
+  if (!data) {
+    console.log("NO data found");
+    return <Navigate to={"/no-logged-in"} replace />;
+  }
   return (
     <>
       {loading ? (
@@ -62,17 +71,17 @@ export default function MyPost() {
             {totalPost === 1 ? "post" : "posts"} found
           </p>
           {message && <div className="alert alert-danger">{message}</div>}
-          {posts.map((post) => (
+          {answers.map((post) => (
             <div key={post._id} className="mt-2">
-              {/* <CardComponents key={post._id} postBody={post} /> */}
               <div className="card bg-light border-secondary">
                 <div className="card-body">
                   <p className="card-text">{post.body}</p>
-                  <div className="p-2  d-flex gap-2">
-                    <Link to={`/posts/${post._id}`}>
-                      <Button className="btn btn-primary">Check answers</Button>
+                  <div className="p-2 d-flex gap-2">
+                    <Link to={`/posts/${post.post._id}`}>
+                      <Button className="btn btn-primary">
+                        Check Question / answers
+                      </Button>
                     </Link>
-
                     <Button
                       className="btn btn-danger"
                       onClick={() => handleClick(post._id)}
@@ -82,6 +91,7 @@ export default function MyPost() {
                   </div>
                 </div>
               </div>
+              {/* <CardComponents key={post._id} postBody={post} /> */}
             </div>
           ))}
         </>

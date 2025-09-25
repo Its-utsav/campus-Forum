@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Input, Button, AlertMessage, AuthNavigation } from "../components";
-import { useAuth } from "../context/User.context";
-import authService from "../services/auth.services";
+import { Input, Button, AlertMessage, AuthNavigation } from "../../components";
+import { useAuth } from "../../context/User.context";
+import authService from "../../services/auth.services";
 
 export default function LoginPage() {
   const { login } = useAuth();

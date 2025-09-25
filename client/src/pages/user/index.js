@@ -9,6 +9,13 @@ import RaiseQuery from "./RaiseQuery";
 import SignUpPage from "./SignUp";
 
 export {
-  AboutMe, HomePage, HomePageForVisiters, LoginPage, PostInfo, RaiseQuery, SignUpPage, MyPost, MyAnswer
+  AboutMe,
+  HomePage,
+  HomePageForVisiters,
+  LoginPage,
+  PostInfo,
+  RaiseQuery,
+  SignUpPage,
+  MyPost,
+  MyAnswer,
 };
-

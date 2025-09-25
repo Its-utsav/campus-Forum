@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
-import postService from "../services/post.services";
-import { InlineAnswerBox, Loading } from "../components";
+import postService from "../../services/post.services";
+import { InlineAnswerBox, Loading } from "../../components";
 
 export default function PostInfo() {
   const { postId } = useParams();

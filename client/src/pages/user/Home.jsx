@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import postService from "../services/post.services";
-import { Loading, CardComponents, AlertMessage } from "../components";
-import { useAuth } from "../context/User.context";
+import postService from "../../services/post.services";
+import { Loading, CardComponents, AlertMessage } from "../../components";
+import { useAuth } from "../../context/User.context";
 import { Navigate, useNavigate } from "react-router";
 
 export default function HomePage() {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import authService from "../services/auth.services";
-import { Loading } from "../components/";
+import authService from "../../services/auth.services";
+import { Loading } from "../../components";
 
 export default function AboutMe() {
   const [userData, setUserData] = useState({});
@@ -49,6 +49,9 @@ export default function AboutMe() {
                   </li>
                   <li className="list-group-item">
                     <strong>ID:</strong> {userData._id}
+                  </li>
+                  <li className="list-group-item">
+                    <strong>Role:</strong> {userData?.role || "user"}
                   </li>
                 </ul>
               </div>

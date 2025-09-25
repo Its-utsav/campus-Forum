@@ -21,7 +21,7 @@ import {
   SignUpPage,
   MyPost,
   MyAnswer,
-} from "./pages/index.js";
+} from "./pages/user";
 
 import { adminRoutes } from "./routes/adminRoutes.jsx";
 

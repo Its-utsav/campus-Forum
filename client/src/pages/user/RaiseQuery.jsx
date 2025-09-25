@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "../components";
-import postService from "../services/post.services";
+import { Button } from "../../components";
+import postService from "../../services/post.services";
 import { useNavigate } from "react-router";
 
 export default function RaiseQuery() {
