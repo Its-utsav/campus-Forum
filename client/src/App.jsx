@@ -27,11 +27,13 @@ function App() {
 
   return (
     <>
-      <Header />
-      <main className="container">
-        <Outlet />
-      </main>
-      <Footer />
+      <div className="app-container">
+        <Header />
+        <main className="container app-content">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }

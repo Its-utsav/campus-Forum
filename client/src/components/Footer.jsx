@@ -10,7 +10,7 @@ export default function Footer() {
     },
   ];
   return (
-    <footer className="bg-primary text-white mt-5">
+    <footer className="bg-primary text-white mt-5 footer ">
       <div className="container py-4">
         <div className="row">
           <div className="col-md-4 mb-3">
