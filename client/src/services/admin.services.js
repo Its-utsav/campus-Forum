@@ -215,6 +215,28 @@ class AdminService {
       throw error;
     }
   }
+  async getAnalytics(date) {
+    try {
+      const res = await fetch(
+        `${this.BASE_URL}/admin/analytics?startDate=${date.startDate}&endDate=${date.endDate}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Error while getAnalytics");
+      }
+      return data.data;
+    } catch (error) {
+      console.error("error :: getAnalytics", error);
+      throw error;
+    }
+  }
 }
 
 const adminService = new AdminService();

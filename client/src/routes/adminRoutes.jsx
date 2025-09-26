@@ -2,6 +2,7 @@ import AdminApp from "../admin/App";
 import Dashboard from "../pages/admin/Dashboard";
 import {
   LoginPage as AdminLogin,
+  Analytics as AnalyticsPage,
   PostDetails,
   UserDetails,
 } from "../pages/admin";
@@ -38,6 +39,7 @@ export const adminRoutes = (
         <Route index element={<Dashboard />} />
         <Route path="user/:userId" element={<UserDetails />} />
         <Route path="post/:postId" element={<PostDetails />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
       </Route>
     </Route>
   </>

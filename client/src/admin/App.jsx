@@ -46,6 +46,12 @@ export default function AdminApp() {
           <Link to={"/admin"} className="btn btn-sm btn-outline-primary">
             Dashboard
           </Link>
+          <Link
+            to={"/admin/analytics"}
+            className="btn btn-sm btn-outline-primary"
+          >
+            Analytics Page
+          </Link>
           <Logout
             onClick={handleClick}
             className="btn btn-sm btn-outline-danger"
